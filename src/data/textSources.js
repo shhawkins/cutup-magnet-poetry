@@ -1,9 +1,16 @@
-import { FaQuoteLeft, FaPen, FaScroll, FaSun, FaBook, FaNewspaper } from 'react-icons/fa';
+import {
+  FaQuoteLeft,
+  FaPen,
+  FaScroll,
+  FaSun,
+  FaBook,
+  FaNewspaper,
+} from "react-icons/fa";
 
 export const textSources = {
   poetry: {
-    name: 'Poetry',
-    color: 'pink.100',
+    name: "Poetry",
+    color: "pink.100",
     icon: FaSun,
     sources: {
       eliot: {
@@ -13,52 +20,450 @@ export const textSources = {
         we stopped in the colonnade, and went on in the streets of the city, feeling the wind. The trees were green and the air was fresh, but the city was full of strange sounds and unknown faces. 
         The cold remained, hidden in the corners of the buildings, yet the warmth of the season had begun to stir. Each new season brings its own challenge: spring with its revival of life, 
         winter with its retreat into the inner world. We are forever caught between the forces of memory and renewal, of dreams and the waking world, living through the storms of life that bring both destruction and growth.`,
-        icon: FaSun
+        icon: FaSun,
       },
       yeats: {
         title: "W.B. Yeats",
-        text: `The world is full of magical things, patiently waiting for our wits to grow sharper. In the stillness of the night, under the pale moon, Yeats finds the voice of his soul. 
-        'Turning and turning in the widening gyre,' he writes, the falcon unable to hear the falconer, a symbol of the chaos that will unfold. The falcon, the bird of prey, 
-        once so connected to its master, now flies blindly, symbolizing the loss of control in the face of turbulent times. In another poem, he expresses the tension between the intellect and the heart, 
-        between the soul and the body, the spiritual and the earthly realms. His deep belief in the supernatural gives rise to ideas that transcend reality, calling forth visions of ancient gods 
-        and mystic rites. He was both deeply involved in the mystical movements of his time and a skeptic, bridging the realms of the occult and the rational mind. His poetry dances between the personal and the universal, 
-        between the emotional highs of love and the despairing depths of human suffering. He understood the fragility of both the individual and the nation, and his works reflect a world torn apart by conflicting ideologies, beliefs, and desires. 
-        Yeats, a seeker of truths in both the material and spiritual worlds, knew that the greatest battles fought are often those within oneself.`,
-        icon: FaSun
+        text: `We sat together at one summer’s end,
+That beautiful mild woman, your close friend,   
+And you and I, and talked of poetry.
+I said, ‘A line will take us hours maybe;
+Yet if it does not seem a moment’s thought,   
+Our stitching and unstitching has been naught.   
+Better go down upon your marrow-bones   
+And scrub a kitchen pavement, or break stones   
+Like an old pauper, in all kinds of weather;   
+For to articulate sweet sounds together
+Is to work harder than all these, and yet   
+Be thought an idler by the noisy set
+Of bankers, schoolmasters, and clergymen   
+The martyrs call the world.’
+                                          And thereupon
+That beautiful mild woman for whose sake   
+There’s many a one shall find out all heartache   
+On finding that her voice is sweet and low   
+Replied, ‘To be born woman is to know—
+Although they do not talk of it at school—
+That we must labour to be beautiful.’
+I said, ‘It’s certain there is no fine thing   
+Since Adam’s fall but needs much labouring.
+There have been lovers who thought love should be   
+So much compounded of high courtesy   
+That they would sigh and quote with learned looks   
+Precedents out of beautiful old books;   
+Yet now it seems an idle trade enough.’
+
+We sat grown quiet at the name of love;   
+We saw the last embers of daylight die,   
+And in the trembling blue-green of the sky   
+A moon, worn as if it had been a shell   
+Washed by time’s waters as they rose and fell   
+About the stars and broke in days and years.
+
+I had a thought for no one’s but your ears:   
+That you were beautiful, and that I strove   
+To love you in the old high way of love;
+That it had all seemed happy, and yet we’d grown   
+As weary-hearted as that hollow moon.
+
+Turning and turning in the widening gyre   
+The falcon cannot hear the falconer;
+Things fall apart; the centre cannot hold;
+Mere anarchy is loosed upon the world,
+The blood-dimmed tide is loosed, and everywhere   
+The ceremony of innocence is drowned;
+The best lack all conviction, while the worst   
+Are full of passionate intensity.
+
+Surely some revelation is at hand;
+Surely the Second Coming is at hand.   
+The Second Coming! Hardly are those words out   
+When a vast image out of Spiritus Mundi
+Troubles my sight: somewhere in sands of the desert   
+A shape with lion body and the head of a man,   
+A gaze blank and pitiless as the sun,   
+Is moving its slow thighs, while all about it   
+Reel shadows of the indignant desert birds.   
+The darkness drops again; but now I know   
+That twenty centuries of stony sleep
+Were vexed to nightmare by a rocking cradle,   
+And what rough beast, its hour come round at last,   
+Slouches towards Bethlehem to be born?
+
+The brawling of a sparrow in the eaves,
+The brilliant moon and all the milky sky,
+And all that famous harmony of leaves,
+Had blotted out man's image and his cry.
+
+A girl arose that had red mournful lips
+And seemed the greatness of the world in tears,
+Doomed like Odysseus and the labouring ships
+And proud as Priam murdered with his peers;
+
+Arose, and on the instant clamorous eaves,
+A climbing moon upon an empty sky,
+And all that lamentation of the leaves,
+Could but compose man's image and his cry.`,
+        icon: FaSun,
       },
       rimbaud: {
         title: "Arthur Rimbaud",
-        text: `I have stretched ropes from steeple to steeple; garlands from window to window; golden chains from star to star, and I dance. The city's towers are alive with storks; their cries pierce the fog. 
-        I've seen specters in the windows, heard the bells toll midnight through the mist. I’ve sailed through the ages, transcending the borders of the human experience. The world that Rimbaud presents is one of both surreal beauty and dark chaos, 
-        a place where love and death are inextricably linked. His verse flows like a river, winding through landscapes of both the fantastical and the terrifying. The natural world becomes a metaphor for human turmoil and longing, 
-        as his words pierce through the veil of reality to show us the mystical and unknown. Rimbaud’s exploration of the limits of language and the boundaries of the self represents a radical break from tradition, a call to see the world in new, transformative ways. 
-        His poetry offers a window into a world that cannot be understood with reason alone, a place where passion and madness intersect.`,
-        icon: FaSun
+        text: `She was barely dressed though,
+
+And the great indiscreet trees
+
+Touched the glass with their leaves,
+
+In malice, quite close, quite close.
+
+Sitting in my deep chair,
+
+Half-naked, hands clasped together,
+
+On the floor, little feet, so fine,
+
+So fine, shivered with pleasure.
+
+I watched, the beeswax colour
+
+Of a truant ray of sun-glow
+
+Flit about her smile, and over
+
+Her breast – a fly on the rose.
+
+– I kissed her delicate ankle.
+
+She gave an abrupt sweet giggle
+
+Chiming in clear trills,
+
+A pretty laugh of crystal.
+
+Her little feet under her slip
+
+Sped away: ‘Will you desist!’
+
+Allowing that first bold act,
+
+Her laugh pretended to punish!
+
+– Trembling under my lips,
+
+Poor things, I gently kissed her lids.
+
+– She threw her vapid head back.
+
+‘Oh! That’s worse, that is!’...
+
+‘Sir, I’ve two words to say to you...’
+
+– I planted the rest on her breast
+
+In a kiss that made her laugh
+
+With a laugh of readiness....
+
+– She was barely dressed though,
+
+And the great indiscreet trees
+
+Touched the glass with their leaves
+
+In malice, quite close, quite close.
+
+As I floated down impassive Rivers,
+I felt myself no longer pulled by ropes:
+The Redskins took my hauliers for targets,
+And nailed them naked to their painted posts.
+
+Carrying Flemish wheat or English cotton,
+I was indifferent to all my crews.
+The Rivers let me float down as I wished,
+When the victims and the sounds were through.
+
+Into the furious breakers of the sea,
+Deafer than the ears of a child, last winter,
+I ran! And the Peninsulas sliding by me
+Never heard a more triumphant clamour.
+
+The tempest blessed my sea-borne arousals.
+Lighter than a cork I danced those waves
+They call the eternal churners of victims,
+Ten nights, without regret for the lighted bays!
+
+Sweeter than sour apples to the children
+The green ooze spurting through my hull’s pine,
+Washed me of vomit and the blue of wine,
+Carried away my rudder and my anchor.
+
+Then I bathed in the Poem of the Sea,
+Infused with stars, the milk-white spume blends,
+Grazing green azures: where ravished, bleached
+Flotsam, a drowned man in dream descends.
+
+Where, staining the blue, sudden deliriums
+And slow tremors under the gleams of fire,
+Stronger than alcohol, vaster than our rhythms,
+Ferment the bitter reds of our desire!
+
+I knew the skies split apart by lightning,
+Waterspouts, breakers, tides: I knew the night,
+The Dawn exalted like a crowd of doves,
+I saw what men think they’ve seen in the light!
+
+I saw the low sun, stained with mystic terrors,
+Illuminate long violet coagulations,
+Like actors in a play, a play that’s ancient,
+Waves rolling back their trembling of shutters!
+
+I dreamt the green night of blinded snows,
+A kiss lifted slow to the eyes of seas,
+The circulation of unheard-of flows,
+Sung phosphorus’s blue-yellow awakenings!
+
+For months on end, I’ve followed the swell
+That batters at the reefs like terrified cattle,
+Not dreaming the Three Marys’ shining feet
+Could muzzle with their force the Ocean’s hell!
+
+I’ve struck Floridas, you know, beyond belief,
+Where eyes of panthers in human skins,
+Merge with the flowers! Rainbow bridles, beneath
+the seas’ horizon, stretched out to shadowy fins!
+
+I’ve seen the great swamps boil, and the hiss
+Where a whole whale rots among the reeds!
+Downfalls of water among tranquilities,
+Distances showering into the abyss.
+
+Nacreous waves, silver suns, glaciers, ember skies!
+Gaunt wrecks deep in the brown vacuities
+Where the giant eels riddled with parasites
+Fall, with dark perfumes, from the twisted trees!
+
+I would have liked to show children dolphins
+Of the blue wave, the golden singing fish.
+– Flowering foams rocked me in my drift,
+At times unutterable winds gave me wings.
+
+Sometimes, a martyr tired of poles and zones,
+The sea whose sobs made my roilings sweet
+Showed me its shadow flowers with yellow mouths
+And I rested like a woman on her knees...
+
+Almost an isle, blowing across my sands, quarrels
+And droppings of pale-eyed clamorous gulls,
+And I scudded on while, over my frayed lines,
+Drowned men sank back in sleep beneath my hull!...
+
+Now I, a boat lost in the hair of bays,
+Hurled by the hurricane through bird-less ether,
+I, whose carcass, sodden with salt-sea water,
+No Monitor or Hanseatic vessel could recover:
+
+Freed, in smoke, risen from the violet fog,
+I, who pierced the red skies like a wall,
+Bearing the sweets that delight true poets,
+Lichens of sunlight, gobbets of azure:
+
+Who ran, stained with electric moonlets,
+A crazed plank, companied by black sea-horses,
+When Julys were crushing with cudgel blows
+Skies of ultramarine in burning funnels:
+
+I, who trembled to hear those agonies
+Of rutting Behemoths and dark Maelstroms,
+Eternal spinner of blue immobilities,
+I regret the ancient parapets of Europe!
+
+I’ve seen archipelagos of stars! And isles
+Whose maddened skies open for the sailor:
+– Is it in depths of night you sleep, exiled,
+Million birds of gold, O future Vigour? –
+
+But, truly, I’ve wept too much! The Dawns
+Are heart-breaking, each moon hell, each sun bitter:
+Fierce love has swallowed me in drunken torpors.
+O let my keel break! Tides draw me down!
+
+If I want one pool in Europe, it’s the cold
+Black pond where into the scented night
+A child squatting filled with sadness launches
+A boat as frail as a May butterfly.
+
+Bathed in your languor, waves, I can no longer
+Cut across the wakes of cotton ships,
+Or sail against the pride of flags, ensigns,
+Or swim the dreadful gaze of prison ships.`,
+        icon: FaSun,
       },
       dickinson: {
         title: "Emily Dickinson",
-        text: `Because I could not stop for Death – He kindly stopped for me – The Carriage held but just Ourselves – And Immortality. 
-        We slowly drove – He knew no haste, And I had put away my labor and my leisure too, For His Civility. We passed the School, where Children strove 
-        At Recess – in the Ring – We passed the Fields of Gazing Grain – We passed the Setting Sun – Or rather – He passed Us – The Dews drew quivering and Chill – 
-        For only Gossamer, my Gown – My Tippet – only Tulle – We paused before a House that seemed A Swelling of the Ground – The Roof was scarcely visible – 
-        The Cornice – in the Ground – Since then – 'Tis Centuries – and yet Feels shorter than the Day I first surmised the Horses' Heads – Were toward Eternity – 
-        The speaker reflects on the journey toward death with acceptance, seeing it as an inevitable companion that guides them into the afterlife. The imagery of the carriage, the school, and the setting sun evokes the passage of time and the inevitable march toward the end.`,
-        icon: FaSun
+        text: `I taste a liquor never brewed – 
+From Tankards scooped in Pearl – 
+Not all the Frankfort Berries
+Yield such an Alcohol!
+
+Inebriate of air – am I – 
+And Debauchee of Dew – 
+Reeling – thro' endless summer days – 
+From inns of molten Blue – 
+
+When "Landlords" turn the drunken Bee
+Out of the Foxglove's door – 
+When Butterflies – renounce their "drams" – 
+I shall but drink the more!
+
+Till Seraphs swing their snowy Hats – 
+And Saints – to windows run – 
+To see the little Tippler
+Leaning against the – Sun!
+--
+Wild nights - Wild nights!
+Were I with thee
+Wild nights should be
+Our luxury!
+
+Futile - the winds -
+To a Heart in port -
+Done with the Compass -
+Done with the Chart!
+
+Rowing in Eden -
+Ah - the Sea!
+Might I but moor - tonight -
+In thee!
+`,
+        icon: FaSun,
+      },
+      blake: {
+        title: "William Blake",
+        text: `Tyger Tyger, burning bright,
+        In the forests of the night;
+        What immortal hand or eye,
+        Could frame thy fearful symmetry?
+
+        In what distant deeps or skies.
+        Burnt the fire of thine eyes?
+        On what wings dare he aspire?
+        What the hand, dare seize the fire?
+
+        And what shoulder, & what art,
+        Could twist the sinews of thy heart?
+        And when thy heart began to beat,
+        What dread hand? & what dread feet?
+
+        What the hammer? what the chain,
+        In what furnace was thy brain?
+        What the anvil? what dread grasp,
+        Dare its deadly terrors clasp?
+
+        When the stars threw down their spears
+        And watered heaven with their tears:
+        Did he smile his work to see?
+        Did he who made the Lamb make thee?
+
+        Tyger Tyger burning bright,
+        In the forests of the night:
+        What immortal hand or eye,
+        Dare frame thy fearful symmetry?
+        
+        --
+        
+        O Rose thou art sick. 
+
+        The invisible worm, 
+
+        That flies in the night 
+
+        In the howling storm:
+        
+        Has found out thy bed 
+        Of crimson joy: 
+        And his dark secret love 
+        Does thy life destroy. `,
+        icon: FaSun,
+      },
+      whitman: {
+        title: "Walt Whitman",
+        text: `I celebrate myself, and sing myself,
+        And what I assume you shall assume,
+        For every atom belonging to me as good belongs to you.
+
+        I loafe and invite my soul,
+        I lean and loafe at my ease observing a spear of summer grass.
+
+        My tongue, every atom of my blood, form'd from this soil, this air,
+        Born here of parents born here from parents the same, and their parents the same,
+        I, now thirty-seven years old in perfect health begin,
+        Hoping to cease not till death.
+
+        Creeds and schools in abeyance,
+        Retiring back a while sufficed at what they are, but never forgotten,
+        I harbor for good or bad, I permit to speak at every hazard,
+        Nature without check with original energy.`,
+        icon: FaSun,
       },
       sappho: {
         title: "Sappho",
-        text: `Like a golden flower growing wild, Sappho’s poetry flourishes in its beauty and passion, bringing to life the complexities of human emotion and desire. Her works transcend the ordinary and speak to the universal aspects of the soul. 
-        Sappho's love poems, though often directed toward women, speak to a broader sense of longing and connection that transcends gender. Her words radiate with the intensity of emotions that spring from the deepest well of the human heart. 
-        "How can I not love you?" she asks, and in that simple question, she distills the essence of longing. Her poetry is steeped in beauty, yet laced with a subtle melancholy as she reflects on the fleeting nature of love and time itself. 
-        She paints with words, creating vivid, timeless images of love’s passion and its inevitable loss. Even as she explores love's joy, she contemplates its fleeting nature, finding a melancholy beauty in the transitory moments of connection between people. 
-        Sappho’s voice remains one of the most influential in history, her words still echoing through time, calling to us across the centuries.`,
-        icon: FaSun
-      }
-    }
+        text: `A Hymn To Venus
+
+O Venus, beauty of the skies,
+To whom a thousand temples rise,
+Gaily false in gentle smiles,
+Full of love-perplexing wiles;
+O goddess, from my heart remove
+The wasting cares and pains of love.
+
+If ever thou hast kindly heard
+A song in soft distress preferred,
+Propitious to my tuneful vow,
+A gentle goddess, hear me now.
+Descend, thou bright immortal guest,
+In all thy radiant charms confessed.
+
+Thou once didst leave almighty Jove
+And all the golden roofs above:
+The car thy wanton sparrows drew,
+Hovering in air they lightly flew;
+As to my bower they winged their way
+I saw their quivering pinions play.
+
+The birds dismissed (while you remain)
+Bore back their empty car again:
+Then you, with looks divinely mild,
+In every heavenly feature smiled,
+And asked what new complaints I made,
+And why I called you to my aid?
+
+What frenzy in my bosom raged,
+And by what cure to be assuaged?
+What gentle youth I would allure,
+Whom in my artful toils secure?
+Who does thy tender heart subdue,
+Tell me, my Sappho, tell me who?
+
+Though now he shuns thy longing arms,
+He soon shall court thy slighted charms;
+Though now thy offerings he despise,
+He soon to thee shall sacrifice;
+Though now he freezes, he soon shall burn,
+And be thy victim in his turn.
+
+Celestial visitant, once more
+Thy needful presence I implore.
+In pity come, and ease my grief,
+Bring my distempered soul relief,
+Favour thy suppliant's hidden fires,
+And give me all my heart desires.`,
+        icon: FaSun,
+      },
+    },
   },
   prose: {
-    name: 'Prose',
-    color: 'blue.100',
+    name: "Prose",
+    color: "blue.100",
     icon: FaPen,
     sources: {
       shakespeare: {
@@ -98,7 +503,7 @@ export const textSources = {
         And lose the name of action.–Soft you now!
         The fair Ophelia! Nymph, in thy orisons
         Be all my sins remember’d.`,
-        icon: FaPen
+        icon: FaPen,
       },
       woolf: {
         title: "Virginia Woolf",
@@ -107,7 +512,7 @@ export const textSources = {
         As they neared the shore each bar rose, heaped itself, broke and swept a thin veil of white water across the sand. The wave paused, and then drew out again, sighing like a sleeper whose breath comes and goes unconsciously. Gradually the dark bar on the horizon became clear as if the sediment in an old wine-bottle has sunk and left the glass green. Behind it, too, the sky cleared as if the white sediment there had sunk, or as if the arm of a woman couched beneath the horizon had raised a lamp and flat bars of white, green and yellow spread across the sky like the blades of a fan. Then she raised her lamp higher and the air seemed to become fibrous and to tear away from the green surface flickering and flaming in red and yellow fibres like the smoky fire that roars from a bonfire. Gradually the fibres of the burning bonfire were fused into one haze, one incandescence which lifted the weight of the woollen grey sky on top of it and turned it to a million atoms of soft blue. The surface of the sea slowly became transparent and lay rippling and sparkling until the dark stripes were almost rubbed out. Slowly the arm that held the lamp raised it higher and then higher until a broad flame became visible; an arc of fire burnt on the rim of the horizon, and all round it the sea blazed gold.
         
         The light struck upon the trees in the garden, making one leaf transparent and then another. One bird chirped high up; there was a pause; another chirped lower down. The sun sharpened the walls of the house, and rested like the tip of a fan upon a white blind and made a blue finger-print of shadow under the leaf by the bedroom window. The blind stirred slightly, but all within was dim and unsubstantial. The birds sang their blank melody outside.`,
-        icon: FaPen
+        icon: FaPen,
       },
       melville: {
         title: "Herman Melville",
@@ -119,13 +524,33 @@ export const textSources = {
         then, I account it high time to get to sea as soon as I can. Melville's narrator, Ishmael, seeks refuge in the vastness of the ocean, 
         both a literal and metaphorical space that holds the promise of freedom and self-discovery. The sea, in Melville’s world, becomes a stage for existential reflection, 
         a symbol of the challenges and absurdities of life itself.`,
-        icon: FaPen
-      }
-    }
+        icon: FaPen,
+      },
+      twain: {
+        title: "Mark Twain",
+        text: "You don't know about me without you have read a book by the name of 'The Adventures of Tom Sawyer'; but that ain't no matter. That book was made by Mr. Mark Twain, and he told the truth, mainly. There was things which he stretched, but mainly he told the truth. That is nothing. I never seen anybody but lied one time or another, without it was Aunt Polly, or the widow, or maybe Mary. Aunt Polly—Tom's Aunt Polly, she is—and Mary, and the Widow Douglas is all told about in that book, which is mostly a true book, with some stretchers, as I said before. Now the way that the book winds up is this: Tom and me found the money that the robbers hid in the cave, and it made us rich. We got six thousand dollars apiece—all gold. It was an awful sight of money when it was piled up. Well, Judge Thatcher he took it and put it out at interest, and it fetched us a dollar a day apiece all the year round—more than a body could tell what to do with. The Widow Douglas she took me for her son, and allowed she would sivilize me; but it was rough living in the house all the time, considering how dismal regular and decent the widow was in all her ways; and so when I couldn't stand it no longer I lit out.",
+        icon: FaPen,
+      },
+      hemingway: {
+        title: "Ernest Hemingway",
+        text: "He was an old man who fished alone in a skiff in the Gulf Stream and he had gone eighty-four days now without taking a fish. In the first forty days a boy had been with him. But after forty days without a fish the boy's parents had told him that the old man was now definitely and finally salao, which is the worst form of unlucky, and the boy had gone at their orders in another boat which caught three good fish the first week. It made the boy sad to see the old man come in each day with his skiff empty and he always went down to help him carry either the coiled lines or the gaff and harpoon and the sail that was furled around the mast. The sail was patched with flour sacks and, furled, it looked like the flag of permanent defeat. The old man was thin and gaunt with deep wrinkles in the back of his neck. The brown blotches of the benevolent skin cancer the sun brings from its reflection on the tropic sea were on his cheeks. The blotches ran well down the sides of his face and his hands had the deep-creased scars from handling heavy fish on the cords. But none of these scars were fresh. They were as old as erosions in a fishless desert.",
+        icon: FaPen,
+      },
+      fitzgerald: {
+        title: "F. Scott Fitzgerald",
+        text: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. 'Whenever you feel like criticizing anyone,' he told me, 'just remember that all the people in this world haven't had the advantages that you've had.' He didn't say any more, but we've always been unusually communicative in a reserved way, and I understood that he meant a great deal more than that. In consequence, I'm inclined to reserve all judgments, a habit that has opened up many curious natures to me and also made me the victim of not a few veteran bores. The abnormal mind is quick to detect and attach itself to this quality when it appears in a normal person, and so it came about that in college I was unjustly accused of being a politician, because I was privy to the secret griefs of wild, unknown men. Most of the confidences were unsought—frequently I have feigned sleep, preoccupation, or a hostile levity when I realized by some unmistakable sign that an intimate revelation was quivering on the horizon—for the intimate revelations of young men, or at least the terms in which they express them, are usually plagiaristic and marred by obvious suppressions.",
+        icon: FaPen,
+      },
+      faulkner: {
+        title: "William Faulkner",
+        text: "Through the fence, between the curling flower spaces, I could see them hitting. They were coming toward where the flag was and I went along the fence. Luster was hunting in the grass by the flower tree. They took the flag out, and they were hitting. Then they put the flag back and they went to the table, and he hit and the other hit. Then they went on, and I went along the fence. Luster came away from them.",
+        icon: FaPen,
+      },
+    },
   },
   nonfiction: {
-    name: 'Non-fiction',
-    color: 'green.100',
+    name: "Non-fiction",
+    color: "green.100",
     icon: FaBook,
     sources: {
       news: {
@@ -136,7 +561,7 @@ export const textSources = {
         Meanwhile, researchers in Antarctica have reported alarming findings, with the ice sheet retreating at an accelerated pace. These developments serve as stark reminders 
         of the interconnectedness of our planet's ecosystems. Despite efforts to slow climate change, we face an uncertain future, one where the balance between progress 
         and sustainability remains precarious. As the world navigates these challenges, it is clear that our actions today will shape the trajectory of tomorrow.`,
-        icon: FaNewspaper
+        icon: FaNewspaper,
       },
       egyptian: {
         title: "Ancient Egyptian Hymn",
@@ -146,7 +571,7 @@ export const textSources = {
         and the soil brings forth its yield. Thou hast established the seasons, the harvest, and the planting of the crops. Thou art the eternal source of fertility, 
         the sacred river that nourishes the earth. The hymn speaks to the reverence with which the Egyptians regarded the Nile, 
         its role in the sustenance of life, and the deep spiritual connection between the land, its people, and the gods.`,
-        icon: FaBook
+        icon: FaBook,
       },
       montaigne: {
         title: "Michel de Montaigne",
@@ -157,13 +582,58 @@ export const textSources = {
         in a deeply personal way, not merely as passive observers but as active participants in the search for meaning. In Montaigne's view, the true path to wisdom 
         lies in understanding oneself, for only by doing so can we hope to understand the broader world. His thoughts resonate even today as we continue our own 
         quest for self-discovery and understanding.`,
-        icon: FaBook
+        icon: FaBook,
       },
-    }
-},
+
+      thoreau: {
+        title: "Henry David Thoreau",
+        text: `I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach, 
+        and not, when I came to die, discover that I had not lived. I did not wish to live what was not life, living is so dear; nor did I wish to practice resignation, 
+        unless it was quite necessary. I wanted to live deep and suck out all the marrow of life, to live so sturdily and Spartan-like as to put to rout all that was not life. 
+        *Walden* is Thoreau’s manifesto of radical simplicity and self-reliance, born from two years in a cabin near Walden Pond. With sharp observation and quiet defiance, 
+        he challenges materialism, routine, and blind conformity. His reflections roam from the texture of morning light to the moral imperative of civil disobedience. 
+        Thoreau urges readers to strip life to its barest essentials, finding freedom not in abundance but in awareness. His prose, meditative and bold, continues to speak 
+        to anyone searching for a more deliberate, meaningful existence.`,
+        icon: FaBook,
+      },
+      baldwin: {
+        title: "James Baldwin",
+        text: `You think your pain and your heartbreak are unprecedented in the history of the world, but then you read. It was books that taught me that the things 
+  that tormented me most were the very things that connected me with all the people who were alive, or who had ever been alive. Baldwin’s work in *The Fire Next Time* 
+  is part memoir, part moral witness, and wholly uncompromising. With lyrical force and righteous clarity, he exposes the violence beneath American racial injustice 
+  and the psychic toll it takes on both oppressed and oppressor. He writes of Harlem, of churches, of family, and of fear—fear of white people, yes, 
+  but also the deeper fear that love might be impossible in such a country. Yet Baldwin does not despair. He calls instead for confrontation—honest, unflinching, 
+  and ultimately redemptive. His vision of justice is inseparable from love, and his voice—prophetic, intimate, urgent—still echoes through the present moment.`,
+        icon: FaBook,
+      },
+      arendt: {
+        title: "Hannah Arendt",
+        text: `The sad truth is that most evil is done by people who never make up their minds to be good or evil. In *The Origins of Totalitarianism*, 
+  Arendt dissects the conditions that gave rise to fascist regimes in the 20th century. With rigorous intellect and moral clarity, she traces the machinery 
+  of ideological control, the destruction of individuality, and the cultivation of terror. Arendt’s most famous concept, the “banality of evil,” does not excuse 
+  but rather reveals: that monstrous acts are often carried out by ordinary people following orders. Her work is not only historical analysis—it is a warning, 
+  a demand to remain awake, to preserve the space of thought and moral judgment. She believed that political responsibility begins with attention, with speech, 
+  and with the courage to act when others remain silent. Her writing is dense but electric, filled with a deep belief in the necessity of human freedom.`,
+        icon: FaBook,
+      },
+      douglass: {
+        title: "Frederick Douglass",
+        text: `I was born in Tuckahoe, near Hillsborough, and about twelve miles from Easton, in Talbot County, Maryland. I have no accurate knowledge of my age, 
+  never having seen any authentic record containing it. The white children could tell their ages. I could not tell why I ought to be deprived of the same privilege. 
+  In *Narrative of the Life of Frederick Douglass, an American Slave*, he recounts his brutal experience under slavery with unsparing clarity and moral urgency. 
+  He describes the whipping of his aunt, the songs sung by enslaved people, the hypocrisy of religious slaveholders, and the life-altering power of learning to read. 
+  Douglass teaches himself literacy in secret, and that knowledge becomes a spark of liberation. His escape to freedom is not only physical but intellectual, 
+  grounded in a belief that words can change the world. His autobiography is not merely testimony but argument—against slavery, yes, but also against the degradation 
+  of human dignity anywhere. Through measured prose and mounting conviction, Douglass transforms personal pain into political power. His voice remains a cornerstone 
+  of American moral literature.`,
+        icon: FaBook,
+      },
+    },
+  },
+
   religious: {
-    name: 'Religious',
-    color: 'purple.100',
+    name: "Religious",
+    color: "purple.100",
     icon: FaScroll,
     sources: {
       bible: {
@@ -179,7 +649,7 @@ And God said, Let there be a firmament in the midst of the waters, and let it di
 From dust to living breath, creation poured forth word by word. Land separated from sea. Stars placed with purpose. Creatures crawling, flying, swimming—the world teeming with order. And man, formed of clay, given dominion, yet called to tend and walk in humility.
 
 Even now, the echoes of Genesis speak not just of beginnings, but of the mystery at the heart of life itself.`,
-        icon: FaScroll
+        icon: FaScroll,
       },
       tao: {
         title: "Tao Te Ching",
@@ -194,7 +664,7 @@ If you understand others, you are smart. If you understand yourself, you are ill
 To yield is to be full. To be content with little is true wealth. The Tao flows endlessly, silently, in all things. It does not strive, yet all things are done.
 
 Let go of control, embrace stillness. This is the way of the Tao.`,
-        icon: FaScroll
+        icon: FaScroll,
       },
       bhagavad: {
         title: "Bhagavad Gita",
@@ -205,8 +675,88 @@ Wise men see all beings with equal vision. The soul is neither born, nor does it
 Arjuna, rise up and fight with peace in your heart. Renounce the fruits, not the action. He who acts without selfish desire is untouched by karma.
 
 Meditation, devotion, and selfless service are all paths to the Divine. But of all yogis, the one who worships Me with unwavering love is the highest.`,
-        icon: FaScroll
-      }
-    }
-  }
+        icon: FaScroll,
+      },
+      quran: {
+        title: "Qur'an",
+        text: `In the name of Allah, the Most Gracious, the Most Merciful.
+
+Praise be to Allah, the Lord of all the worlds. The Most Gracious, the Most Merciful. Master of the Day of Judgment. You alone we worship, and You alone we ask for help.
+
+Guide us on the Straight Path—the path of those who have received Your grace; not the path of those who have brought down wrath upon themselves, nor of those who have gone astray.
+
+Indeed, Allah is with those who are mindful of Him and those who do good. He is the Light of the heavens and the earth. His light is like a niche within which is a lamp—the lamp is within glass, the glass as if it were a brilliant star.
+
+Recite what has been revealed to you of the Book and establish prayer. Indeed, prayer prohibits immorality and wrongdoing, and the remembrance of Allah is greater. And Allah knows that which you do.
+
+And We have certainly created man and know what his soul whispers to him, and We are closer to him than his jugular vein.
+
+So remember Me; I will remember you. Be grateful to Me and do not deny Me.`,
+        icon: FaScroll,
+      },
+      dhammapada: {
+        title: "Dhammapada",
+        text: `All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts.
+
+If a man speaks or acts with an evil thought, pain follows him, as the wheel follows the foot of the ox that draws the carriage.
+
+If a man speaks or acts with a pure thought, happiness follows him, like a shadow that never leaves him.
+
+Hatred does not cease by hatred at any time: hatred ceases by love—this is an eternal rule.
+
+Let a man overcome anger by love, evil by good; let him overcome the greedy by liberality, the liar by truth.
+
+The wise man makes an island of himself that no flood can overwhelm.
+
+Better than a thousand hollow words is one word that brings peace.
+
+All conditioned things are impermanent—when one sees this with wisdom, one turns away from suffering.
+
+All conditioned things are unsatisfactory—when one sees this with wisdom, one turns away from suffering.
+
+All things are not-self—when one sees this with wisdom, one turns away from suffering.`,
+        icon: FaScroll,
+      },
+      book_of_mormon: {
+        title: "Book of Mormon",
+        text: `And now, my beloved brethren, I would that ye should come unto Christ, who is the Holy One of Israel, and partake of his salvation, and the power of his redemption.
+
+Yea, come unto him, and offer your whole souls as an offering unto him, and continue in fasting and praying, and endure to the end; and as the Lord liveth ye will be saved.
+
+And we talk of Christ, we rejoice in Christ, we preach of Christ, we prophesy of Christ, and we write according to our prophecies.
+
+For the natural man is an enemy to God, and has been from the fall of Adam, and will be, forever and ever, unless he yields to the enticings of the Holy Spirit.
+
+Wherefore, ye must press forward with a steadfastness in Christ, having a perfect brightness of hope, and a love of God and of all men.
+
+If ye shall press forward, feasting upon the word of Christ, and endure to the end, behold, thus saith the Father: Ye shall have eternal life.
+
+And now, behold, I say unto you that the right way is to believe in Christ, and deny him not.
+
+And Christ is the Holy One of Israel; wherefore ye must bow down before him, and worship him with all your might, mind, and strength, and your whole soul.
+
+And if ye do this, ye shall in nowise be cast out.`,
+        icon: FaScroll,
+      },
+      popol_vuh: {
+        title: "Popol Vuh",
+        text: `This is the beginning of the ancient traditions of this place called Quiché.
+
+Here we shall write. We shall begin to tell the ancient stories of the beginning, the origin of all that was done in the citadel of Quiché, among the people of the Quiché nation.
+
+All is silent and calm. Hushed and empty is the womb of the sky.
+
+The first humans were made of earth and mud, but crumbled. The second humans were created from wood, but they did not function well and were washed away in a flood and killed by animals. Those that survived became monkeys.
+
+The Hero Twins, Hunahpu and Xbalanque, plan to kill Vucub-Caquix and his sons, Zipacna and Cabracan. They succeed, restoring order and balance to the world.
+
+The father and uncle of the Hero Twins are murdered at a ball game in Xibalba. Hun Hunahpu's head is placed in a calabash tree, where it spits in the hand of Xquiq, impregnating her.
+
+Her sons then challenge the Lords who killed their father and uncle, succeeding and becoming the sun and the moon.
+
+Humans are successfully created from maize. The gods give them morality in order to keep them loyal. Later, they give the humans wives to make them content.`,
+        icon: FaScroll,
+      },
+    },
+  },
 };

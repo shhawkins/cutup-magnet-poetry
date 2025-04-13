@@ -5,12 +5,14 @@ import {
   Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
 } from '@chakra-ui/react';
 import { 
-  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaChevronDown,
+  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaDice, FaChevronDown,
   FaChevronUp, FaChevronDown as FaChevronExpand
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
 import { textSources } from './data/textSources';
+import { FaDiceFive } from "react-icons/fa6";
+
 
 
 function App() {
@@ -71,6 +73,66 @@ const getRandomSnippet = (text) => {
   if (sentences.length <= 3) return text;
   const startIndex = Math.floor(Math.random() * (sentences.length - 3));
   return sentences.slice(startIndex, startIndex + 3).join(' ');
+};
+
+// Function to refresh a specific source's snippet with a new random selection
+const refreshSourceSnippet = (sourceId) => {
+  // Find the source in the selected sources array
+  setSelectedSources(prevSources => {
+    return prevSources.map(source => {
+      // Only update the targeted source
+      if (source.id === sourceId) {
+        // Get the full text based on source type
+        const fullText = source.category === 'custom' 
+          ? source.text 
+          : textSources[source.category].sources[source.key].text;
+          
+        // Extract a different snippet from the text
+        // Split by sentence endings (., !, ?)
+        const sentences = fullText.match(/[^.!?]+[.!?]+/g) || [fullText];
+        
+        // Choose a different random starting point if possible
+        let newStartIndex;
+        if (sentences.length <= 3) {
+          newStartIndex = 0; // Not enough sentences for variety
+        } else {
+          // Try to get a different starting point than current snippet
+          const currentFirstSentence = source.snippet.split(/[.!?]/)[0];
+          let attempts = 0;
+          
+          do {
+            newStartIndex = Math.floor(Math.random() * (sentences.length - 3));
+            attempts++;
+          } while (
+            sentences[newStartIndex].includes(currentFirstSentence) && 
+            attempts < 5
+          );
+        }
+        
+        // Extract the new snippet
+        const newSnippet = sentences.length <= 3 
+          ? fullText 
+          : sentences.slice(newStartIndex, newStartIndex + 3).join(' ');
+          
+        // Show a subtle notification
+        toast({
+          title: "Snippet refreshed",
+          status: "info",
+          duration: 1000,
+          isClosable: true,
+        });
+        
+        // Return updated source with new snippet
+        return {
+          ...source,
+          snippet: newSnippet
+        };
+      }
+      
+      // Return other sources unchanged
+      return source;
+    });
+  });
 };
 
 // Handle dragging the divider to resize sections
@@ -332,8 +394,73 @@ const cutUpText = (text) => {
   });
 
   setTiles(positionedTiles);
-  toast({ title: 'New tiles created!', status: 'info' });
   };
+
+// Add more tiles to the existing board
+const addTiles = () => {
+  // Validate source selection
+  if (selectedSources.length < 1) {
+    toast({
+      title: 'Select at least 1 source!',
+      status: 'warning'
+    });
+    return;
+  }
+
+  updateBoardSize();
+
+  // Combine text from all selected sources
+  const allText = selectedSources.map(source => {
+    return source.category === 'custom' 
+      ? source.text 
+      : textSources[source.category].sources[source.key].text;
+  }).join(' ');
+
+  // Cut up text 
+  const cutUpTiles = cutUpText(allText);
+  
+  // Shuffle and select 5-15 new tiles
+  const numNewTiles = 5 + Math.floor(Math.random() * 11); // Random number between 5-15
+  const shuffledTiles = shuffleArray(cutUpTiles).slice(0, numNewTiles);
+
+  // Get board dimensions with fallbacks
+  const boardWidth = boardRef.current?.clientWidth || window.innerWidth * 0.9;
+  const boardHeight = boardRef.current?.clientHeight || window.innerHeight * 0.6;
+
+  // Conservative padding to keep tiles fully visible
+  const padding = 30;
+
+  const newTiles = shuffledTiles.map((text, i) => {
+    // Get tile size first so we can use it for positioning
+    const tileSize = calculateTileSize(text);
+    
+    // Calculate safe boundaries accounting for tile width/height
+    const safeMaxX = boardWidth - padding - tileSize.width;
+    const safeMaxY = boardHeight - padding - tileSize.height;
+    const safeMinX = padding;
+    const safeMinY = padding;
+    
+    // Generate random position within safe boundaries
+    const x = safeMinX + Math.random() * (safeMaxX - safeMinX);
+    const y = safeMinY + Math.random() * (safeMaxY - safeMinY);
+    
+    return {
+      id: `tile-${Date.now()}-${i}-add`,
+      text,
+      x,
+      y,
+      width: tileSize.width,
+      height: tileSize.height
+    };
+  });
+
+  // Add new tiles to existing tiles
+  setTiles(prev => [...prev, ...newTiles]);
+  toast({ 
+    title: `Added ${newTiles.length} new tiles!`, 
+    status: 'success' 
+  });
+};
 
   // Repositions existing tiles to random locations on the board
   const shuffleTiles = () => {
@@ -398,7 +525,7 @@ const cutUpText = (text) => {
   // Clear tiles
   const clearTiles = () => {
     setTiles([]);
-    toast({ title: 'Tiles cleared!', status: 'info'});
+    toast({ title: 'Tiles cleared!', status: 'error'});
   };
 
   // Toggle source section
@@ -408,6 +535,68 @@ const cutUpText = (text) => {
     // After toggling, update board size
     setTimeout(updateBoardSize, 100);
   };
+
+  // Function to randomly select up to 10 new sources
+const randomizeSources = () => {
+  // Clear existing sources first
+  setSelectedSources([]);
+  setCustomTexts([]);
+  
+  // Get all categories and their sources
+  const allCategories = Object.keys(textSources);
+  const availableSources = [];
+  
+  // Create a flat list of all available sources with their category and key
+  allCategories.forEach(category => {
+    Object.keys(textSources[category].sources).forEach(sourceKey => {
+      availableSources.push({
+        category,
+        sourceKey
+      });
+    });
+  });
+  
+  // Shuffle the list of sources
+  const shuffledSources = shuffleArray([...availableSources]);
+  
+  // Select up to 10 sources
+  const maxSources = Math.min(10, shuffledSources.length);
+  const selectedCount = 2 + Math.floor(Math.random() * (maxSources - 1)); // At least 2, up to 10
+  
+  // Add each selected source
+  const newSources = shuffledSources.slice(0, selectedCount);
+  
+  // Add each source (using your existing addSource function)
+  newSources.forEach(source => {
+    const sourceId = `${source.category}-${source.sourceKey}`;
+    const sourceInfo = textSources[source.category].sources[source.sourceKey];
+    const snippet = getRandomSnippet(sourceInfo.text);
+    
+    const newSource = {
+      id: sourceId,
+      category: source.category,
+      key: source.sourceKey,
+      title: sourceInfo.title,
+      snippet,
+      color: textSources[source.category].color,
+      icon: sourceInfo.icon
+    };
+    
+    setSelectedSources(prev => [...prev, newSource]);
+  });
+  
+  // Show notification
+  toast({ 
+    title: `Randomly selected ${selectedCount} sources!`, 
+    status: 'success',
+    duration: 2000
+  });
+  
+  // Automatically generate new cut-up tiles
+  setTimeout(() => {
+    generateTiles();
+  }, 500);
+};
 
   // Update board size when window is resized
   useEffect(() => {
@@ -487,11 +676,17 @@ const cutUpText = (text) => {
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
               />
-              <IconButton
+              {/* <IconButton
                 icon={<FaPlus />}
                 onClick={addCustomText}
                 aria-label="Add custom text"
                 colorScheme="teal"
+              /> */}
+              <IconButton
+                icon={<FaDiceFive />}
+                onClick={randomizeSources}
+                aria-label="Add random sources"
+                colorScheme="blue"
               />
             </HStack>
             
@@ -641,17 +836,38 @@ const cutUpText = (text) => {
                         position="relative"
                         overflow="hidden"
                       >
+                        <IconButton
+                          icon={<FaDiceFive/>}
+                          size="xs"
+                          position="absolute"
+                          right="20px" 
+                          top="2px"
+                          onClick={() => refreshSourceSnippet(source.id)}
+                          aria-label="Refresh snippet"
+                          variant="ghost"
+                          _hover={{ bg: "blackAlpha.200" }}
+                          title="Get new snippet"
+                        />
                         <CloseButton
                           size="sm"
                           position="absolute"
                           right="2px"
                           top="2px"
                           onClick={() => removeSource(source.id)}
+                          title="Close source"
                         />
                         <VStack height="full" align="start" spacing={1}>
                           <HStack>
                             {source.icon && <Icon as={source.icon} />}
-                            <Text fontWeight="bold" fontSize="sm" noOfLines={1}>
+                            <Text 
+                              fontWeight="bold" 
+                              fontSize="xs"        // Smaller font size (from "sm" to "xs")
+                              noOfLines={2}        // Allow up to 2 lines instead of 1
+                              wordBreak="break-word" // Force word wrapping
+                              width="calc(100% - 20px)" // Allow space for the icon
+                              paddingRight="3px"
+                              paddingTop="8px"
+                            >
                               {source.title}
                             </Text>
                           </HStack>
@@ -794,6 +1010,13 @@ const cutUpText = (text) => {
     justifyContent="center"
   >
     <IconButton
+      icon={<FaPlus />}
+      onClick={addTiles}
+      aria-label="Recut from Sources"
+      colorScheme="green"
+      title="Generate new tiles to replace current tiles"
+    />
+    <IconButton
       icon={<FaCut />}
       onClick={generateTiles}
       aria-label="Recut from Sources"
@@ -803,11 +1026,7 @@ const cutUpText = (text) => {
     <IconButton
       icon={<FaRandom />}
       onClick={() => {
-        shuffleTiles();
-        toast({
-          title: "Tiles shuffled!",
-          status: "info"
-        });
+        shuffleTiles()
       }}
       aria-label="Shuffle Tiles"
       colorScheme="pink"
