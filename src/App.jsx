@@ -15,7 +15,6 @@ import { FaDiceFive } from "react-icons/fa6";
 
 
 
-
 function App() {
   const [selectedSources, setSelectedSources] = useState([]);
   const [customTexts, setCustomTexts] = useState([]);
@@ -31,6 +30,53 @@ function App() {
   const [showSourceSection, setShowSourceSection] = useState(true);
   const appContainerRef = useRef(null);
   const footerRef = useRef(null);
+
+  // Literary quotes that cycle in the footer
+  const quotes = [
+    { text: `🛸 "Language is a virus from outer space."`, author: "William S. Burroughs" },
+    { text: `⭐ "The poet doesn't invent. He listens."`, author: "Jean Cocteau" },
+    { text: `🎨 "If there's a voice in your head saying, 'You can't paint,' you must surely paint, and silence that voice."`, author: "Vincent Van Gogh" },
+    { text: `✂️ "All writing is in fact cut-ups."`, author: "William S. Burroughs" },
+    { text: `⏲️ "If I waited for perfection, I wouldn't write a thing."`, author: "Margaret Atwood" },
+    { text: `🖋️ "You can always edit a bad page. You can't edit a blank page."`, author: "Jodi Picoult" },
+    { text: `🧵 "Art is never finished, only abandoned."`, author: "Leonardo da Vinci" },
+    { text: `☠️ "Have no fear of perfection, you’ll never reach it."`, author: "Salvador Dali" },
+    { text: `🗣️ "Creativity is contagious, pass it on."`, author: "Albert Einstein" },
+    { text: `🩸 "Writing is easy. You only need to stare at a blank piece of paper until drops of blood form on your forehead."`, author: "Gene Fowler" },
+    { text: `📚 "Originality is nothing but judicious imitation."`, author: "Voltaire" },
+    { text: `🌈 "I never paint dreams or nightmares. I paint my own reality."`, author: "Frida Kahlo" },
+    { text: `🔍 "Creativity is piercing the mundane to find the marvelous."`, author: "Bill Moyers" },
+    { text: `☀️ "A man is a success if he gets up in the morning and gets to bed at night, and in between he does what he wants to do."`, author: "Bob Dylan" },
+    { text: `🌌 "The world of reality has its limits; the world of imagination is boundless."`, author: "Jean-Jacques Rousseau" },
+    { text: `🌀 "Those who do not want to imitate anything, produce nothing."`, author: "Salvador Dali" },
+    { text: `🗨️ "Be who you are and say what you feel because those who mind don’t matter and those who matter don’t mind."`, author: "Dr. Seuss" },
+    { text: `🌍 "The artist’s world is limitless. It can be found anywhere, far from where he lives or a few feet away. It is always on his doorstep."`, author: "Paul Strand" },
+    { text: `🔍 "Creativity is piercing the mundane to find the marvelous."`, author: "Bill Moyers" },
+    { text: `🎯 "Creativity is allowing yourself to make mistakes. Art is knowing which ones to keep."`, author: "Scott Adams" },
+    { text: `🌪️ "I accept chaos, I'm not sure whether it accepts me."`, author: "Bob Dylan" },
+    { text: `💡 "My reality needs imagination like a bulb needs a socket. My imagination needs reality like a blind man needs a cane."`, author: "Tom Waits" },
+    { text: `🚫 "Don't try."`, author: "Charles Bukowski" },
+    { text: `🧭 "To create one’s own world takes courage."`, author: "Georgia O'Keefe" },
+    { text: `🌱 "To practice any art, no matter how well or how badly, is a way to make your soul grow, for heaven’s sake. So do it."`, author: "Kurt Vonnegut" },
+    { text: `🧠 "In the future, everyone will be famous for 15 minutes."`, author: "Andy Warhol" },
+    { text: `🕳️ "I am not strange. I am just not normal."`, author: "Salvador Dali" },
+    { text: `🩹 "When you cut into the present, the future leaks out."`, author: "William S. Burroughs" },
+    { text: `📼 "Nothing is original. Steal from anywhere that resonates with inspiration or fuels your imagination."`, author: "Jim Jarmusch" },
+    { text: `💭 "Dreams are today's answers to tomorrow's questions."`, author: "Edgar Cayce" },
+  ];
+  
+  
+
+const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
+// Add this useEffect to change quotes periodically
+useEffect(() => {
+  const quoteTimer = setInterval(() => {
+    setCurrentQuoteIndex(prevIndex => (prevIndex + 1) % quotes.length);
+  }, 8000); // Change quote every 8 seconds
+  
+  return () => clearInterval(quoteTimer); // Clean up on unmount
+}, []);
   
   // Custom theme for fonts
 const theme = extendTheme({
@@ -706,15 +752,8 @@ const randomizeSources = () => {
               title="🎲 Select random sources"
             >
             </IconButton>
-            <IconButton
-              colorScheme="teal"
-              onClick={addTiles}
-              icon={<FaPlus />}
-              title="➕ Add more tiles"
-            >
-            </IconButton>
             <Input
-              placeholder="Type here..."
+              placeholder="Add a source... ⤵"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
@@ -726,14 +765,6 @@ const randomizeSources = () => {
                 colorScheme="green"
                 title="Copy canvas"
               /> */}
-                <IconButton
-                icon={<FaRandom />}
-                onClick={() => {
-                  shuffleTiles()
-                }}
-                colorScheme="pink"
-                title="🔀 Shuffle tiles"
-              />
               <IconButton
                 icon={<FaCloudDownloadAlt />}
                 onClick={exportImage}
@@ -806,6 +837,7 @@ const randomizeSources = () => {
                 </Box>
                 
                 {/* Cut Up Button */}
+                <HStack>
                 <Button 
                   leftIcon={<FaCut />} 
                   colorScheme="teal" 
@@ -813,11 +845,32 @@ const randomizeSources = () => {
                   isDisabled={selectedSources.length < 1}
                   size="lg"
                   height="50px"
+                  width="90%"
                   fontSize="xl"
                   title="✂️ Cut sources up into magnetic tiles"
                 >
                   Cut!
                 </Button>
+                <IconButton
+                colorScheme="teal"
+                onClick={addTiles}
+                icon={<FaPlus />}
+                title="➕ Add more tiles"
+                height="50px"
+                width="50px"
+              >
+                </IconButton>
+              <IconButton
+                colorScheme="pink"
+                onClick={shuffleTiles}
+                icon={<FaRandom />}
+                title="🔀 Shuffle tiles"                
+                height="50px"
+                width="50px"
+              >
+              </IconButton>
+              
+              </HStack>
               </Flex>
             </Box>
             
@@ -874,7 +927,7 @@ const randomizeSources = () => {
                     textAlign="center"
                     px={4}
                   >
-                    Select a source...
+                    ↗️ Select a source...
                   </Text>
                 </Flex>
               ) : (
@@ -1160,17 +1213,18 @@ const randomizeSources = () => {
     /> */}
   </HStack>
   
-  {/* Quote Footer - Hide on small screens */}
+{/* Quote Footer - Hide on small screens */}
   <Box
     as="footer"
     display={{ base: "none", md: "block" }}
-    mb={3}
+    mb={7}
     textAlign="center"
     fontStyle="italic"
     color="gray.600"
     fontSize="sm"
+    ref={footerRef}
   >
-    "Language is a virus from outer space." -William S. Burroughs
+     {quotes[currentQuoteIndex].text} -{quotes[currentQuoteIndex].author}
   </Box>
 </Box>
 
