@@ -5,13 +5,14 @@ import {
   Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
 } from '@chakra-ui/react';
 import { 
-  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaDice, FaChevronDown,
+  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
   FaChevronUp, FaChevronDown as FaChevronExpand
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
 import { textSources } from './data/textSources';
 import { FaDiceFive } from "react-icons/fa6";
+
 
 
 
@@ -335,20 +336,12 @@ const cutUpText = (text) => {
 
   // Generates new tiles and distributes them on the board with absolute positioning
   const generateTiles = () => {
-    // Validate source selection
-    if (selectedSources.length < 2) {
-      toast({
-        title: 'Select at least 2 sources!',
-        status: 'warning'
-      });
-      return;
-    }
 
     // Hide source section on mobile
     if (showSourceSection && window.innerWidth < 768) {
       setShowSourceSection(false);
     }
-
+    
     updateBoardSize();
 
     // Combine text from all selected sources
@@ -390,7 +383,9 @@ const cutUpText = (text) => {
         y,
         width: tileSize.width,
         height: tileSize.height
-    };
+    
+      };
+
   });
 
   setTiles(positionedTiles);
@@ -519,7 +514,7 @@ const addTiles = () => {
       link.href = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG at 70% quality
       link.click();
     });
-    toast({ title: 'Cutting board saved to disk!', status: 'success'});
+    toast({ title: 'Canvas saved to disk!', status: 'success'});
   };
 
   // Clear tiles
@@ -560,19 +555,18 @@ const randomizeSources = () => {
   const shuffledSources = shuffleArray([...availableSources]);
   
   // Select up to 10 sources
-  const maxSources = Math.min(10, shuffledSources.length);
+  const maxSources = Math.min(25, shuffledSources.length);
   const selectedCount = 2 + Math.floor(Math.random() * (maxSources - 1)); // At least 2, up to 10
   
   // Add each selected source
   const newSources = shuffledSources.slice(0, selectedCount);
   
-  // Add each source (using your existing addSource function)
-  newSources.forEach(source => {
+  const sourcesToAdd = newSources.map(source => {
     const sourceId = `${source.category}-${source.sourceKey}`;
     const sourceInfo = textSources[source.category].sources[source.sourceKey];
     const snippet = getRandomSnippet(sourceInfo.text);
     
-    const newSource = {
+    return {
       id: sourceId,
       category: source.category,
       key: source.sourceKey,
@@ -581,9 +575,9 @@ const randomizeSources = () => {
       color: textSources[source.category].color,
       icon: sourceInfo.icon
     };
-    
-    setSelectedSources(prev => [...prev, newSource]);
   });
+  
+  setSelectedSources(sourcesToAdd);
   
   // Show notification
   toast({ 
@@ -625,37 +619,51 @@ const randomizeSources = () => {
         bg="gray.50"
         overflow="hidden"
       >
-        {/* App Header with Toggle Button */}
-        <Flex 
-          width="100%" 
-          bg="white" 
-          pt={4}
-          pb={3}
-          px={6}
-          alignItems="center"
-          justifyContent="space-between"
-          borderBottom="1px solid"
-          borderColor="gray.200"
-        >
-          <Text 
-            fontSize={{ base: "3xl", md: "4xl" }}
-            fontFamily="'Courier New', Courier, monospace"
-            fontWeight="bold"
-            color="black"
-          >
-            cut up
-          </Text>
-          
-          <Button
-            size="sm"
-            variant="ghost"
-            rightIcon={showSourceSection ? <FaChevronUp /> : <FaChevronExpand />}
-            onClick={toggleSourceSection}
-            _hover={{ bg: "gray.100" }}
-          >
-            {showSourceSection ? "Hide Sources" : "Show Sources"}
-          </Button>
-        </Flex>
+{/* App Header with Toggle Button */}
+<Flex 
+  width="100%" 
+  bg="white" 
+  pt={4}
+  pb={3}
+  px={6}
+  alignItems="center"
+  justifyContent="space-between"
+  borderBottom="1px solid"
+  borderColor="gray.200"
+>
+  <Box>
+    <Text 
+      fontSize={{ base: "3xl", md: "4xl" }}
+      fontFamily="'Courier New', Courier, monospace"
+      fontWeight="bold"
+      color="black"
+      lineHeight="1"
+    >
+    ✂️cut up
+    </Text>
+    <Text
+      fontSize="xs"
+      color="gray.500"
+      fontStyle="italic"
+      ml={20}
+      mt={-1}
+      fontFamily="'Courier New', Courier, monospace"
+    >
+      remix language
+    </Text>
+  </Box>
+  
+  <Button
+    size="sm"
+    variant="ghost"
+    leftIcon={showSourceSection ? <FaExpand /> : <FaCompress />}
+    rightIcon={showSourceSection ? <FaChevronUp /> : <FaChevronExpand />}
+    onClick={toggleSourceSection}
+    _hover={{ bg: "gray.100" }}
+  >
+    {showSourceSection ? "Hide Sources" : "Show Sources"}
+  </Button>
+</Flex>
         
         {/* Sources Section - Collapsible */}
         {showSourceSection && (
@@ -670,23 +678,48 @@ const randomizeSources = () => {
           >
             {/* Text Input Box */}
             <HStack width="full">
-              <Input
-                placeholder="Enter text or select a source below..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
+            <IconButton
+              icon={<FaDiceFive />}
+              onClick={randomizeSources}
+              colorScheme="blue"
+              title="Select random sources to cut"
+            >
+            </IconButton>
+            <Input
+              placeholder="Type here and press enter..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
+            />
+            <IconButton
+              colorScheme="teal"
+              onClick={addTiles}
+              icon={<FaPlus />}
+              title="Add more tiles"
+            >
+            </IconButton>
+            <IconButton
+                icon={<FaRandom />}
+                onClick={() => {
+                  shuffleTiles()
+                }}
+                aria-label="Shuffle Tiles"
+                colorScheme="pink"
+                title="Shuffle tiles"
               />
-              {/* <IconButton
-                icon={<FaPlus />}
-                onClick={addCustomText}
-                aria-label="Add custom text"
-                colorScheme="teal"
-              /> */}
               <IconButton
-                icon={<FaDiceFive />}
-                onClick={randomizeSources}
-                aria-label="Add random sources"
+                icon={<FaCloudDownloadAlt />}
+                onClick={exportImage}
+                aria-label="Export as image"
                 colorScheme="blue"
+                title="Download canvas"
+              />
+              <IconButton
+                icon={<FaTrash />}
+                onClick={clearTiles}
+                aria-label="Clear all tiles"
+                colorScheme="red"
+                title="Clear unused tiles"
               />
             </HStack>
             
@@ -752,9 +785,11 @@ const randomizeSources = () => {
                   leftIcon={<FaCut />} 
                   colorScheme="teal" 
                   onClick={generateTiles}
+                  isDisabled={selectedSources.length < 1}
                   size="lg"
                   height="50px"
                   fontSize="xl"
+                  title="Cut sources up into magnetic tiles!"
                 >
                   Cut!
                 </Button>
@@ -845,7 +880,11 @@ const randomizeSources = () => {
                           onClick={() => refreshSourceSnippet(source.id)}
                           aria-label="Refresh snippet"
                           variant="ghost"
-                          _hover={{ bg: "blackAlpha.200" }}
+                          _focus={{ boxShadow: "none" }}
+                          _hover={{ outline: "none" }}
+                          _focusVisible={{ boxShadow: "none" }}
+                          mr="5px"
+
                           title="Get new snippet"
                         />
                         <CloseButton
@@ -865,8 +904,8 @@ const randomizeSources = () => {
                               noOfLines={2}        // Allow up to 2 lines instead of 1
                               wordBreak="break-word" // Force word wrapping
                               width="calc(100% - 20px)" // Allow space for the icon
-                              paddingRight="3px"
-                              paddingTop="8px"
+                              paddingRight="6px"
+                              paddingTop="11px"
                             >
                               {source.title}
                             </Text>
@@ -899,6 +938,34 @@ const randomizeSources = () => {
             <Text fontSize="sm" fontWeight="medium">
               {selectedSources.length} sources selected
             </Text>
+            <HStack>
+            <Button
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={addTiles}
+              leftIcon={<FaPlus />}
+            >
+              Add More Tiles
+            </Button>
+            <Button
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={shuffleTiles}
+              leftIcon={<FaRandom />}
+            >
+              Shuffle Tiles
+            </Button>
+            <Button
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={randomizeSources}
+              leftIcon={<FaDiceFive />}
+            >
+              Random Sources
+            </Button>
             <Button
               size="xs"
               variant="outline"
@@ -906,8 +973,29 @@ const randomizeSources = () => {
               onClick={generateTiles}
               leftIcon={<FaCut />}
             >
-              Cut Again
+              Cut Sources
             </Button>
+            <Button
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={exportImage}
+              leftIcon={<FaCloudDownloadAlt />}
+            >
+              Download Canvas
+            </Button>
+            <Button
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={() => {
+                clearTiles()
+              }}
+              leftIcon={<FaTrash />}
+            >
+              Clear Board
+            </Button>
+            </HStack>
           </Flex>
         )}
 
@@ -1009,12 +1097,12 @@ const randomizeSources = () => {
     spacing={{ base: 2, md: 4 }}
     justifyContent="center"
   >
-    <IconButton
+    {/* <IconButton
       icon={<FaPlus />}
       onClick={addTiles}
-      aria-label="Recut from Sources"
+      aria-label="Add more tiles"
       colorScheme="green"
-      title="Generate new tiles to replace current tiles"
+      title="Add more tiles to the board"
     />
     <IconButton
       icon={<FaCut />}
@@ -1031,9 +1119,9 @@ const randomizeSources = () => {
       aria-label="Shuffle Tiles"
       colorScheme="pink"
       title="Shuffle tiles"
-    />
-    <IconButton
-      icon={<FaDownload />}
+    /> */}
+    {/* <IconButton
+      icon={<FaCloudDownloadAlt />}
       onClick={exportImage}
       aria-label="Export as image"
       colorScheme="blue"
@@ -1045,14 +1133,14 @@ const randomizeSources = () => {
       aria-label="Clear all tiles"
       colorScheme="red"
       title="Clear unused tiles"
-    />
+    /> */}
   </HStack>
   
   {/* Quote Footer - Hide on small screens */}
   <Box
     as="footer"
     display={{ base: "none", md: "block" }}
-    mb={6}
+    mb={3}
     textAlign="center"
     fontStyle="italic"
     color="gray.600"

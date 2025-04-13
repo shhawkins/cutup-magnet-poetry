@@ -464,7 +464,7 @@ And give me all my heart desires.`,
   prose: {
     name: "Prose",
     color: "blue.100",
-    icon: FaPen,
+    icon: FaQuoteLeft,
     sources: {
       shakespeare: {
         title: "Shakespeare",
@@ -503,7 +503,7 @@ And give me all my heart desires.`,
         And lose the name of action.–Soft you now!
         The fair Ophelia! Nymph, in thy orisons
         Be all my sins remember’d.`,
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       woolf: {
         title: "Virginia Woolf",
@@ -512,7 +512,7 @@ And give me all my heart desires.`,
         As they neared the shore each bar rose, heaped itself, broke and swept a thin veil of white water across the sand. The wave paused, and then drew out again, sighing like a sleeper whose breath comes and goes unconsciously. Gradually the dark bar on the horizon became clear as if the sediment in an old wine-bottle has sunk and left the glass green. Behind it, too, the sky cleared as if the white sediment there had sunk, or as if the arm of a woman couched beneath the horizon had raised a lamp and flat bars of white, green and yellow spread across the sky like the blades of a fan. Then she raised her lamp higher and the air seemed to become fibrous and to tear away from the green surface flickering and flaming in red and yellow fibres like the smoky fire that roars from a bonfire. Gradually the fibres of the burning bonfire were fused into one haze, one incandescence which lifted the weight of the woollen grey sky on top of it and turned it to a million atoms of soft blue. The surface of the sea slowly became transparent and lay rippling and sparkling until the dark stripes were almost rubbed out. Slowly the arm that held the lamp raised it higher and then higher until a broad flame became visible; an arc of fire burnt on the rim of the horizon, and all round it the sea blazed gold.
         
         The light struck upon the trees in the garden, making one leaf transparent and then another. One bird chirped high up; there was a pause; another chirped lower down. The sun sharpened the walls of the house, and rested like the tip of a fan upon a white blind and made a blue finger-print of shadow under the leaf by the bedroom window. The blind stirred slightly, but all within was dim and unsubstantial. The birds sang their blank melody outside.`,
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       melville: {
         title: "Herman Melville",
@@ -524,27 +524,27 @@ And give me all my heart desires.`,
         then, I account it high time to get to sea as soon as I can. Melville's narrator, Ishmael, seeks refuge in the vastness of the ocean, 
         both a literal and metaphorical space that holds the promise of freedom and self-discovery. The sea, in Melville’s world, becomes a stage for existential reflection, 
         a symbol of the challenges and absurdities of life itself.`,
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       twain: {
         title: "Mark Twain",
         text: "You don't know about me without you have read a book by the name of 'The Adventures of Tom Sawyer'; but that ain't no matter. That book was made by Mr. Mark Twain, and he told the truth, mainly. There was things which he stretched, but mainly he told the truth. That is nothing. I never seen anybody but lied one time or another, without it was Aunt Polly, or the widow, or maybe Mary. Aunt Polly—Tom's Aunt Polly, she is—and Mary, and the Widow Douglas is all told about in that book, which is mostly a true book, with some stretchers, as I said before. Now the way that the book winds up is this: Tom and me found the money that the robbers hid in the cave, and it made us rich. We got six thousand dollars apiece—all gold. It was an awful sight of money when it was piled up. Well, Judge Thatcher he took it and put it out at interest, and it fetched us a dollar a day apiece all the year round—more than a body could tell what to do with. The Widow Douglas she took me for her son, and allowed she would sivilize me; but it was rough living in the house all the time, considering how dismal regular and decent the widow was in all her ways; and so when I couldn't stand it no longer I lit out.",
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       hemingway: {
         title: "Ernest Hemingway",
         text: "He was an old man who fished alone in a skiff in the Gulf Stream and he had gone eighty-four days now without taking a fish. In the first forty days a boy had been with him. But after forty days without a fish the boy's parents had told him that the old man was now definitely and finally salao, which is the worst form of unlucky, and the boy had gone at their orders in another boat which caught three good fish the first week. It made the boy sad to see the old man come in each day with his skiff empty and he always went down to help him carry either the coiled lines or the gaff and harpoon and the sail that was furled around the mast. The sail was patched with flour sacks and, furled, it looked like the flag of permanent defeat. The old man was thin and gaunt with deep wrinkles in the back of his neck. The brown blotches of the benevolent skin cancer the sun brings from its reflection on the tropic sea were on his cheeks. The blotches ran well down the sides of his face and his hands had the deep-creased scars from handling heavy fish on the cords. But none of these scars were fresh. They were as old as erosions in a fishless desert.",
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       fitzgerald: {
         title: "F. Scott Fitzgerald",
         text: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. 'Whenever you feel like criticizing anyone,' he told me, 'just remember that all the people in this world haven't had the advantages that you've had.' He didn't say any more, but we've always been unusually communicative in a reserved way, and I understood that he meant a great deal more than that. In consequence, I'm inclined to reserve all judgments, a habit that has opened up many curious natures to me and also made me the victim of not a few veteran bores. The abnormal mind is quick to detect and attach itself to this quality when it appears in a normal person, and so it came about that in college I was unjustly accused of being a politician, because I was privy to the secret griefs of wild, unknown men. Most of the confidences were unsought—frequently I have feigned sleep, preoccupation, or a hostile levity when I realized by some unmistakable sign that an intimate revelation was quivering on the horizon—for the intimate revelations of young men, or at least the terms in which they express them, are usually plagiaristic and marred by obvious suppressions.",
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
       faulkner: {
         title: "William Faulkner",
         text: "Through the fence, between the curling flower spaces, I could see them hitting. They were coming toward where the flag was and I went along the fence. Luster was hunting in the grass by the flower tree. They took the flag out, and they were hitting. Then they put the flag back and they went to the table, and he hit and the other hit. Then they went on, and I went along the fence. Luster came away from them.",
-        icon: FaPen,
+        icon: FaQuoteLeft,
       },
     },
   },
