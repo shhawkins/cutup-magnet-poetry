@@ -5,7 +5,7 @@ import {
   Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
 } from '@chakra-ui/react';
 import { 
-  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
+  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaCopy, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
   FaChevronUp, FaChevronDown as FaChevronExpand
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
@@ -517,6 +517,26 @@ const addTiles = () => {
     toast({ title: 'Canvas saved to disk!', status: 'success'});
   };
 
+  // Copy to clipboard
+  const copyImageToClipboard = async () => {
+    try {
+      const canvas = await html2canvas(boardRef.current, { backgroundColor: '#f7fafc' });
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      
+      if (!blob) throw new Error("Failed to create image blob");
+  
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob })
+      ]);
+  
+      toast({ title: 'Canvas copied to clipboard!', status: 'success' });
+    } catch (err) {
+      console.error('Failed to copy image:', err);
+      toast({ title: 'Failed to copy image', description: err.message, status: 'error' });
+    }
+  };
+  
+
   // Clear tiles
   const clearTiles = () => {
     setTiles([]);
@@ -660,6 +680,7 @@ const randomizeSources = () => {
     rightIcon={showSourceSection ? <FaChevronUp /> : <FaChevronExpand />}
     onClick={toggleSourceSection}
     _hover={{ bg: "gray.100" }}
+    title="📺 Toggle fullscreen"
   >
     {showSourceSection ? "Hide Sources" : "Show Sources"}
   </Button>
@@ -682,7 +703,14 @@ const randomizeSources = () => {
               icon={<FaDiceFive />}
               onClick={randomizeSources}
               colorScheme="blue"
-              title="Select random sources to cut"
+              title="🎲 Select random sources"
+            >
+            </IconButton>
+            <IconButton
+              colorScheme="teal"
+              onClick={addTiles}
+              icon={<FaPlus />}
+              title="➕ Add more tiles"
             >
             </IconButton>
             <Input
@@ -691,35 +719,32 @@ const randomizeSources = () => {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
             />
-            <IconButton
-              colorScheme="teal"
-              onClick={addTiles}
-              icon={<FaPlus />}
-              title="Add more tiles"
-            >
-            </IconButton>
-            <IconButton
+              {/* <IconButton
+                icon={<FaCopy />}
+                onClick={copyImageToClipboard}
+                aria-label="Copy"
+                colorScheme="green"
+                title="Copy canvas"
+              /> */}
+                <IconButton
                 icon={<FaRandom />}
                 onClick={() => {
                   shuffleTiles()
                 }}
-                aria-label="Shuffle Tiles"
                 colorScheme="pink"
-                title="Shuffle tiles"
+                title="🔀 Shuffle tiles"
               />
               <IconButton
                 icon={<FaCloudDownloadAlt />}
                 onClick={exportImage}
-                aria-label="Export as image"
                 colorScheme="blue"
-                title="Download canvas"
+                title="⬇💾 Download canvas"
               />
               <IconButton
                 icon={<FaTrash />}
                 onClick={clearTiles}
-                aria-label="Clear all tiles"
                 colorScheme="red"
-                title="Clear unused tiles"
+                title="☠️ Clear all tiles"
               />
             </HStack>
             
@@ -817,6 +842,7 @@ const randomizeSources = () => {
                     size="xs"
                     colorScheme="red"
                     borderRadius="full"
+                    title="❌ Clear all sources"
                     onClick={() => {
                       setSelectedSources([]);
                       setCustomTexts([]);
@@ -885,7 +911,7 @@ const randomizeSources = () => {
                           _focusVisible={{ boxShadow: "none" }}
                           mr="5px"
 
-                          title="Get new snippet"
+                          title="🔄 Get new snippet"
                         />
                         <CloseButton
                           size="sm"
@@ -893,7 +919,7 @@ const randomizeSources = () => {
                           right="2px"
                           top="2px"
                           onClick={() => removeSource(source.id)}
-                          title="Close source"
+                          title="❌ Close source"
                         />
                         <VStack height="full" align="start" spacing={1}>
                           <HStack>
@@ -945,7 +971,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={addTiles}
               icon={<FaPlus />}
-              title="Add more tiles"
+              title="➕ Add more tiles"
             >
             </IconButton>
             <IconButton
@@ -954,7 +980,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={randomizeSources}
               icon={<FaDiceFive />}
-              title="Cut up random sources"
+              title="🎲 Cut up random sources"
             >
             <IconButton
               size="xs"
@@ -962,7 +988,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={shuffleTiles}
               icon={<FaRandom />}
-              title="Shuffle tiles"
+              title="🔀 Shuffle tiles"
 
             >
             </IconButton>
@@ -973,7 +999,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={generateTiles}
               icon={<FaCut />}
-              title="Cut up selected sources again"
+              title="✂️ Cut up selected sources"
             >
             </IconButton>
             <IconButton
@@ -982,7 +1008,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={exportImage}
               icon={<FaCloudDownloadAlt />}
-              title="Save canvas to disk"
+              title="⬇️ 💾 Save canvas to disk"
             >
             </IconButton>
             <IconButton
@@ -991,7 +1017,7 @@ const randomizeSources = () => {
               colorScheme="teal"
               onClick={clearTiles}
               icon={<FaTrash />}
-              title="Clear all tiles."
+              title="☠️ Clear all tiles"
             >
             </IconButton>
             </HStack>
