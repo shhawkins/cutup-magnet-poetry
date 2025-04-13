@@ -647,7 +647,7 @@ const randomizeSources = () => {
   
   // Show notification
   toast({ 
-    title: `Randomly selected ${selectedCount} sources`, 
+    title: `Randomly generated tiles from ${selectedCount} sources`, 
     status: 'success',
     duration: 2000
   });
@@ -752,8 +752,15 @@ const randomizeSources = () => {
               title="🎲 Select random sources"
             >
             </IconButton>
+            <IconButton
+                colorScheme="teal"
+                onClick={addTiles}
+                icon={<FaPlus />}
+                title="➕ Add more tiles"
+              >
+                </IconButton>
             <Input
-              placeholder="Add a source... ⤵"
+              placeholder="Paste text here... ⤵"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
@@ -766,17 +773,24 @@ const randomizeSources = () => {
                 title="Copy canvas"
               /> */}
               <IconButton
+                icon={<FaTrash />}
+                onClick={clearTiles}
+                colorScheme="red"
+                title="❌ Clear all tiles"
+              />
+              <IconButton
                 icon={<FaCloudDownloadAlt />}
                 onClick={exportImage}
                 colorScheme="blue"
                 title="⬇💾 Download canvas"
               />
               <IconButton
-                icon={<FaTrash />}
-                onClick={clearTiles}
-                colorScheme="red"
-                title="☠️ Clear all tiles"
-              />
+                colorScheme="pink"
+                onClick={shuffleTiles}
+                icon={<FaRandom />}
+                title="🔀 Shuffle tiles"                
+              >
+              </IconButton>
             </HStack>
             
             {/* Category Buttons and Cut Up Button */}
@@ -845,31 +859,12 @@ const randomizeSources = () => {
                   isDisabled={selectedSources.length < 1}
                   size="lg"
                   height="50px"
-                  width="90%"
+                  width="100%"
                   fontSize="xl"
                   title="✂️ Cut sources up into magnetic tiles"
                 >
                   Cut!
                 </Button>
-                <IconButton
-                colorScheme="teal"
-                onClick={addTiles}
-                icon={<FaPlus />}
-                title="➕ Add more tiles"
-                height="50px"
-                width="50px"
-              >
-                </IconButton>
-              <IconButton
-                colorScheme="pink"
-                onClick={shuffleTiles}
-                icon={<FaRandom />}
-                title="🔀 Shuffle tiles"                
-                height="50px"
-                width="50px"
-              >
-              </IconButton>
-              
               </HStack>
               </Flex>
             </Box>
@@ -1217,6 +1212,7 @@ const randomizeSources = () => {
   <Box
     as="footer"
     display={{ base: "none", md: "block" }}
+    mt={3}
     mb={7}
     textAlign="center"
     fontStyle="italic"
