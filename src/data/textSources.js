@@ -4,6 +4,7 @@ export const textSources = {
   poetry: {
     name: 'Poetry',
     color: 'pink.100',
+    icon: FaSun,
     sources: {
       eliot: {
         title: "T.S. Eliot",
@@ -23,7 +24,7 @@ export const textSources = {
         and mystic rites. He was both deeply involved in the mystical movements of his time and a skeptic, bridging the realms of the occult and the rational mind. His poetry dances between the personal and the universal, 
         between the emotional highs of love and the despairing depths of human suffering. He understood the fragility of both the individual and the nation, and his works reflect a world torn apart by conflicting ideologies, beliefs, and desires. 
         Yeats, a seeker of truths in both the material and spiritual worlds, knew that the greatest battles fought are often those within oneself.`,
-        icon: FaPen
+        icon: FaSun
       },
       rimbaud: {
         title: "Arthur Rimbaud",
@@ -51,13 +52,14 @@ export const textSources = {
         "How can I not love you?" she asks, and in that simple question, she distills the essence of longing. Her poetry is steeped in beauty, yet laced with a subtle melancholy as she reflects on the fleeting nature of love and time itself. 
         She paints with words, creating vivid, timeless images of love’s passion and its inevitable loss. Even as she explores love's joy, she contemplates its fleeting nature, finding a melancholy beauty in the transitory moments of connection between people. 
         Sappho’s voice remains one of the most influential in history, her words still echoing through time, calling to us across the centuries.`,
-        icon: FaPen
+        icon: FaSun
       }
     }
   },
   prose: {
     name: 'Prose',
     color: 'blue.100',
+    icon: FaPen,
     sources: {
       shakespeare: {
         title: "Shakespeare",
@@ -96,7 +98,7 @@ export const textSources = {
         And lose the name of action.–Soft you now!
         The fair Ophelia! Nymph, in thy orisons
         Be all my sins remember’d.`,
-        icon: FaQuoteLeft
+        icon: FaPen
       },
       woolf: {
         title: "Virginia Woolf",
@@ -105,7 +107,7 @@ export const textSources = {
         As they neared the shore each bar rose, heaped itself, broke and swept a thin veil of white water across the sand. The wave paused, and then drew out again, sighing like a sleeper whose breath comes and goes unconsciously. Gradually the dark bar on the horizon became clear as if the sediment in an old wine-bottle has sunk and left the glass green. Behind it, too, the sky cleared as if the white sediment there had sunk, or as if the arm of a woman couched beneath the horizon had raised a lamp and flat bars of white, green and yellow spread across the sky like the blades of a fan. Then she raised her lamp higher and the air seemed to become fibrous and to tear away from the green surface flickering and flaming in red and yellow fibres like the smoky fire that roars from a bonfire. Gradually the fibres of the burning bonfire were fused into one haze, one incandescence which lifted the weight of the woollen grey sky on top of it and turned it to a million atoms of soft blue. The surface of the sea slowly became transparent and lay rippling and sparkling until the dark stripes were almost rubbed out. Slowly the arm that held the lamp raised it higher and then higher until a broad flame became visible; an arc of fire burnt on the rim of the horizon, and all round it the sea blazed gold.
         
         The light struck upon the trees in the garden, making one leaf transparent and then another. One bird chirped high up; there was a pause; another chirped lower down. The sun sharpened the walls of the house, and rested like the tip of a fan upon a white blind and made a blue finger-print of shadow under the leaf by the bedroom window. The blind stirred slightly, but all within was dim and unsubstantial. The birds sang their blank melody outside.`,
-        icon: FaQuoteLeft
+        icon: FaPen
       },
       melville: {
         title: "Herman Melville",
@@ -117,13 +119,14 @@ export const textSources = {
         then, I account it high time to get to sea as soon as I can. Melville's narrator, Ishmael, seeks refuge in the vastness of the ocean, 
         both a literal and metaphorical space that holds the promise of freedom and self-discovery. The sea, in Melville’s world, becomes a stage for existential reflection, 
         a symbol of the challenges and absurdities of life itself.`,
-        icon: FaQuoteLeft
+        icon: FaPen
       }
     }
   },
   nonfiction: {
     name: 'Non-fiction',
     color: 'green.100',
+    icon: FaBook,
     sources: {
       news: {
         title: "2025 News",
@@ -161,6 +164,7 @@ export const textSources = {
   religious: {
     name: 'Religious',
     color: 'purple.100',
+    icon: FaScroll,
     sources: {
       bible: {
         title: "Genesis",

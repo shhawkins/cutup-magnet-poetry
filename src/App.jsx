@@ -1,18 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ChakraProvider, Box, Flex, VStack, HStack, Button, IconButton, Input,
-  Text, Divider, useToast, extendTheme, Menu, MenuButton, MenuList, MenuItem,
+  Text, Divider, useToast, extendTheme,
   Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
 } from '@chakra-ui/react';
 import { 
-  FaCut, FaFileExport, FaClipboard, FaTrash, FaPlus, FaChevronDown,
+  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaChevronDown,
   FaChevronUp, FaChevronDown as FaChevronExpand
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
 import { textSources } from './data/textSources';
 
-// Custom theme for fonts
+
+function App() {
+  const [selectedSources, setSelectedSources] = useState([]);
+  const [customTexts, setCustomTexts] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [tiles, setTiles] = useState([]);
+  const boardRef = useRef(null);
+  const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
+  const toast = useToast({
+    position: "top-middle",
+    duration: 1600,
+    isClosable: true,
+  });
+  const [showSourceSection, setShowSourceSection] = useState(true);
+  const appContainerRef = useRef(null);
+  const footerRef = useRef(null);
+  
+  // Custom theme for fonts
 const theme = extendTheme({
   styles: {
     global: {
@@ -51,12 +68,79 @@ const shuffleArray = (arr) => {
 const getRandomSnippet = (text) => {
   // Split by sentence endings (., !, ?)
   const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-  
   if (sentences.length <= 3) return text;
-  
   const startIndex = Math.floor(Math.random() * (sentences.length - 3));
   return sentences.slice(startIndex, startIndex + 3).join(' ');
 };
+
+// Handle dragging the divider to resize sections
+const handleDividerDrag = (clientY) => {
+  // Don't process if source section is hidden
+  if (!showSourceSection) return;
+  
+  // Get the current position
+  const mouseY = clientY;
+  
+  // Get container position and dimensions
+  const containerRect = appContainerRef.current.getBoundingClientRect();
+  const containerTop = containerRect.top;
+  const containerHeight = containerRect.height;
+  
+  // Calculate the new height as a percentage of the container
+  // We constrain the source section size between 5% and 95% of the container height
+  const newHeightPercent = Math.max(12, Math.min(95, 
+    ((mouseY - containerTop) / containerHeight) * 100
+  ));
+  
+  // Apply the new height to the source section if it's visible
+  if (appContainerRef.current) {
+    // Find the source section element (first child of the container)
+    const sourceSection = appContainerRef.current.querySelector('div > div.chakra-stack');
+    
+    if (sourceSection) {
+      sourceSection.style.maxHeight = `${newHeightPercent}vh`;
+      sourceSection.style.height = `${newHeightPercent}vh`;
+    }
+  }
+  
+  // Update board size after resize
+  updateBoardSize();
+};
+
+// Mouse event handlers
+const handleMouseMove = (e) => {
+  handleDividerDrag(e.clientY);
+};
+
+const handleTouchMove = (e) => {
+  e.preventDefault(); // Prevent scrolling while dragging
+  if (e.touches && e.touches[0]) {
+    handleDividerDrag(e.touches[0].clientY);
+  }
+};
+
+const startDrag = (e) => {
+  // Only allow dragging if source section is visible
+  if (!showSourceSection) return;
+  
+  e.preventDefault();
+  
+  // For mouse events
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', stopDrag);
+  
+  // For touch events
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('touchend', stopDrag);
+};
+
+const stopDrag = () => {
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', stopDrag);
+  window.removeEventListener('touchmove', handleTouchMove);
+  window.removeEventListener('touchend', stopDrag);
+};
+
 
 // Cut-up logic using Intl.Segmenter
 const cutUpText = (text) => {
@@ -92,22 +176,6 @@ const cutUpText = (text) => {
 
   return tiles;
 };
-
-function App() {
-  const [selectedSources, setSelectedSources] = useState([]);
-  const [customTexts, setCustomTexts] = useState([]);
-  const [inputText, setInputText] = useState('');
-  const [tiles, setTiles] = useState([]);
-  const boardRef = useRef(null);
-  const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
-  const toast = useToast({
-    position: "bottom-right",
-    duration: 2000,
-    isClosable: true,
-  });
-  const [showSourceSection, setShowSourceSection] = useState(true);
-  const appContainerRef = useRef(null);
-  
 
   // Add a source to selected sources
   const addSource = (category, sourceKey, onClose) => {
@@ -184,8 +252,8 @@ function App() {
   // Calculate average tile size for better distribution and make smaller for mobile
   const calculateTileSize = (text) => {
     const isMobile = window.innerWidth < 768;
-    const baseWidth = isMobile ? 80 : 120; // Smaller width on mobile
-    const baseHeight = isMobile ? 40 : 60; // Smaller height on mobile
+    const baseWidth = isMobile ? 60 : 120; // Smaller width on mobile
+    const baseHeight = isMobile ? 20 : 60; // Smaller height on mobile
     
     // Scale based on text length
     const length = text.length;
@@ -193,60 +261,65 @@ function App() {
     let height = baseHeight;
     
     if (length > 30) {
-      width = baseWidth * 1.5;
-      height = baseHeight * 1.3;
+      width = baseWidth * 1.3;
+      height = baseHeight * 1.2;
     } else if (length > 15) {
-      width = baseWidth * 1.2;
-      height = baseHeight * 1.1;
+      width = baseWidth * 1;
+      height = baseHeight * .9;
     }
     
     return { width, height };
   };
 
-  // Improved tile generation with better positioning
+  // Generates new tiles and distributes them on the board with absolute positioning
   const generateTiles = () => {
     // Validate source selection
     if (selectedSources.length < 2) {
       toast({
         title: 'Select at least 2 sources!',
-        status: 'warning',
-        duration: 2000
+        status: 'warning'
       });
       return;
     }
-    
+
+    // Hide source section on mobile
+    if (showSourceSection && window.innerWidth < 768) {
+      setShowSourceSection(false);
+    }
+
+    updateBoardSize();
+
     // Combine text from all selected sources
     const allText = selectedSources.map(source => {
       return source.category === 'custom' 
         ? source.text 
         : textSources[source.category].sources[source.key].text;
     }).join(' ');
-    
-    // Cut up text and limit number of tiles
+
+    // Cut up text and limit to max tiles
     const MAX_TILES = 25;
     const shuffledTiles = shuffleArray(cutUpText(allText)).slice(0, MAX_TILES);
-    
-    // Ensure board dimensions are up to date
-    updateBoardSize();
-    
-    // Get board dimensions
-    const boardWidth = boardRef.current ? boardRef.current.clientWidth : window.innerWidth * 0.95;
-    const boardHeight = boardRef.current ? boardRef.current.clientHeight : window.innerHeight * 0.5;
-    
-    // Set padding and create positioning boundaries
-    const padding = 20;
-    const minX = padding;
-    const maxX = boardWidth - padding;
-    const minY = boardHeight / 2; // Start in lower half of the canvas
-    const maxY = boardHeight - padding;
-    
-    // Create positioned tiles with random distribution
+
+    // Get board dimensions with fallbacks
+    const boardWidth = boardRef.current?.clientWidth || window.innerWidth * 0.9;
+    const boardHeight = boardRef.current?.clientHeight || window.innerHeight * 0.6;
+
+    // Conservative padding to keep tiles fully visible
+    const padding = 30;
+
     const positionedTiles = shuffledTiles.map((text, i) => {
+      // Get tile size first so we can use it for positioning
       const tileSize = calculateTileSize(text);
       
-      // Random position within the lower half
-      const x = minX + Math.random() * (maxX - minX - tileSize.width);
-      const y = minY + Math.random() * (maxY - minY - tileSize.height);
+      // Calculate safe boundaries accounting for tile width/height
+      const safeMaxX = boardWidth - padding - tileSize.width;
+      const safeMaxY = boardHeight - padding - tileSize.height;
+      const safeMinX = padding;
+      const safeMinY = padding;
+      
+      // Generate random position within safe boundaries
+      const x = safeMinX + Math.random() * (safeMaxX - safeMinX);
+      const y = safeMinY + Math.random() * (safeMaxY - safeMinY);
       
       return {
         id: `tile-${Date.now()}-${i}`,
@@ -255,41 +328,77 @@ function App() {
         y,
         width: tileSize.width,
         height: tileSize.height
+    };
+  });
+
+  setTiles(positionedTiles);
+  toast({ title: 'New tiles created!', status: 'info' });
+  };
+
+  // Repositions existing tiles to random locations on the board
+  const shuffleTiles = () => {
+    // Make sure we have the latest board size
+    updateBoardSize();
+    
+    // Only proceed if there are tiles to reposition
+    if (tiles.length === 0) {
+      toast({
+        title: 'No tiles to shuffle!',
+        status: 'warning'
+      });
+      return;
+    }
+    
+    // Get board dimensions with fallbacks
+    const boardWidth = boardRef.current?.clientWidth || window.innerWidth * 0.9;
+    const boardHeight = boardRef.current?.clientHeight || window.innerHeight * 0.6;
+    
+    // Conservative padding to keep tiles fully visible
+    const padding = 30;
+    
+    // Create new tiles with the same content but new positions and IDs
+    // This forces React to re-render the Draggable components
+    const repositionedTiles = tiles.map(tile => {
+      // Calculate safe boundaries accounting for tile width/height
+      const safeMaxX = boardWidth - padding - tile.width;
+      const safeMaxY = boardHeight - padding - tile.height;
+      const safeMinX = padding;
+      const safeMinY = padding;
+      
+      // Generate random position within safe boundaries
+      const x = safeMinX + Math.random() * (safeMaxX - safeMinX);
+      const y = safeMinY + Math.random() * (safeMaxY - safeMinY);
+
+      // Return a new tile object with a new ID but the same text content
+      return {
+        id: `tile-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        text: tile.text,
+        x,
+        y,
+        width: tile.width,
+        height: tile.height
       };
     });
     
-    setTiles(positionedTiles);
-    
-    // Hide source section after generating tiles to give more space to the board
-    if (showSourceSection && window.innerWidth < 768) { // Only auto-hide on mobile
-      setShowSourceSection(false);
-    }
+    // Update state with new tile objects
+    setTiles(repositionedTiles);
   };
 
   // Export as image
   const exportImage = () => {
     html2canvas(boardRef.current, { backgroundColor: '#f7fafc' }).then(canvas => {
       const link = document.createElement('a');
-      link.download = 'cut-up-poetry.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = 'cut-up-poetry.jpg';
+      link.href = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG at 70% quality
       link.click();
     });
-  };
-
-  // Copy to clipboard
-  const copyToClipboard = () => {
-    html2canvas(boardRef.current, { backgroundColor: '#f7fafc' }).then(canvas => {
-      canvas.toBlob(blob => {
-        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-        toast({ title: 'Copied to clipboard!', status: 'success', duration: 2000 });
-      });
-    });
+    toast({ title: 'Cutting board saved to disk!', status: 'success'});
   };
 
   // Clear tiles
   const clearTiles = () => {
     setTiles([]);
-    toast({ title: 'All tiles cleared!', status: 'info', duration: 2000 });
+    toast({ title: 'Tiles cleared!', status: 'info'});
   };
 
   // Toggle source section
@@ -311,57 +420,6 @@ function App() {
     
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Add pinch-to-zoom functionality
-useEffect(() => {
-  if (!boardRef.current) return;
-  
-  let currentScale = 1;
-  let startDistance = 0;
-  
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 2) {
-      startDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-    }
-  };
-  
-  const handleTouchMove = (e) => {
-    if (e.touches.length === 2) {
-      e.preventDefault(); // Prevent default scrolling when pinching
-      
-      const currentDistance = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      
-      if (startDistance > 0) {
-        const newScale = currentScale * (currentDistance / startDistance);
-        currentScale = Math.max(0.5, Math.min(newScale, 2)); // Limit scale between 0.5 and 2
-        
-        // Apply the scale transformation to the board content
-        const contentElement = boardRef.current.querySelector('.board-content');
-        if (contentElement) {
-          contentElement.style.transform = `scale(${currentScale})`;
-          contentElement.style.transformOrigin = 'center center';
-        }
-        
-        startDistance = currentDistance;
-      }
-    }
-  };
-  
-  const board = boardRef.current;
-  board.addEventListener('touchstart', handleTouchStart);
-  board.addEventListener('touchmove', handleTouchMove, { passive: false });
-  
-  return () => {
-    board.removeEventListener('touchstart', handleTouchStart);
-    board.removeEventListener('touchmove', handleTouchMove);
-  };
-}, []);
 
   // Update board size when sources change (which affects layout)
   useEffect(() => {
@@ -459,6 +517,7 @@ useEffect(() => {
                             <Button
                               colorScheme={textSources[category].color.split('.')[0]}
                               variant="solid"
+                              leftIcon={<Icon as={textSources[category].icon} />}
                               rightIcon={<FaChevronDown />}
                               size="lg"
                               width={{ base: "calc(50% - 4px)", md: "auto" }}
@@ -531,17 +590,18 @@ useEffect(() => {
                     onClick={() => {
                       setSelectedSources([]);
                       setCustomTexts([]);
-                      toast({ title: 'All sources cleared!', status: 'info', duration: 2000 });
+                      toast({ title: 'All sources cleared!', status: 'info'});
                     }}
                   >
-                    Remove All Sources
+                    Remove All
                   </Button>
                 )}
               </Flex>
+              
               {selectedSources.length === 0 ? (
                 <Flex
-                  width="150px"
-                  height="150px"
+                  width="100px"
+                  height="100px"
                   justifyContent="center"
                   alignItems="center"
                   borderRadius="lg"
@@ -549,6 +609,7 @@ useEffect(() => {
                   borderWidth="2px"
                   borderStyle="dashed"
                   borderColor="gray.300"
+                  padding="20px"
                 >
                   <Text
                     fontSize="lg"
@@ -557,7 +618,7 @@ useEffect(() => {
                     textAlign="center"
                     px={4}
                   >
-                    Select 2+ Sources to Begin
+                    Select 2+ Sources
                   </Text>
                 </Flex>
               ) : (
@@ -634,6 +695,27 @@ useEffect(() => {
           </Flex>
         )}
 
+        {/* Adjustable Divider with larger hit area */}
+        <Box 
+          position="relative" 
+          width="100%" 
+          height={showSourceSection ? "12px" : "2px"} // Increased height for larger touch target
+          cursor={showSourceSection ? "ns-resize" : "default"}
+          _hover={showSourceSection ? { '& > hr': { borderColor: "teal.400", borderWidth: "3px" } } : {}}
+          onMouseDown={startDrag}
+          onTouchStart={startDrag}
+        >
+          <Divider
+            position="absolute"
+            top="50%"
+            transform="translateY(-50%)"
+            borderColor="gray.400"
+            borderWidth="3px"
+            width="100%"
+            pointerEvents="none" // The parent Box handles events
+          />
+        </Box>
+
         {/* Cutting Board Section */}
         <Box
           ref={boardRef}
@@ -695,17 +777,49 @@ useEffect(() => {
         </Box>
 
 {/* Action Buttons and Footer */}
-<Flex 
-  direction="column" 
-  align="center" 
-  w="full"
+<Box 
+  position="absolute" 
+  bottom="0" 
+  left="0" 
+  right="0" 
+  width="100%"
+  bg="gray.50"
+  borderTop="1px solid"
+  borderColor="gray.200"
+  zIndex={10}
 >
   <HStack 
-    p={{ base: 2, md: 4 }} 
-    spacing={{ base: 2, md: 4 }} 
-    bg="gray.50" 
+    p={{ base: 2, md: 2 }} 
+    spacing={{ base: 2, md: 4 }}
     justifyContent="center"
   >
+    <IconButton
+      icon={<FaCut />}
+      onClick={generateTiles}
+      aria-label="Recut from Sources"
+      colorScheme="teal"
+      title="Generate new tiles to replace current tiles"
+    />
+    <IconButton
+      icon={<FaRandom />}
+      onClick={() => {
+        shuffleTiles();
+        toast({
+          title: "Tiles shuffled!",
+          status: "info"
+        });
+      }}
+      aria-label="Shuffle Tiles"
+      colorScheme="pink"
+      title="Shuffle tiles"
+    />
+    <IconButton
+      icon={<FaDownload />}
+      onClick={exportImage}
+      aria-label="Export as image"
+      colorScheme="blue"
+      title="Download canvas"
+    />
     <IconButton
       icon={<FaTrash />}
       onClick={clearTiles}
@@ -713,24 +827,12 @@ useEffect(() => {
       colorScheme="red"
       title="Clear unused tiles"
     />
-    <IconButton
-      icon={<FaFileExport />}
-      onClick={exportImage}
-      aria-label="Export as image"
-      colorScheme="blue"
-    />
-    <IconButton
-      icon={<FaClipboard />}
-      onClick={copyToClipboard}
-      aria-label="Copy to clipboard"
-      colorScheme="green"
-    />
   </HStack>
   
-  {/* Quote Footer */}
+  {/* Quote Footer - Hide on small screens */}
   <Box
     as="footer"
-    mt={10}
+    display={{ base: "none", md: "block" }}
     mb={6}
     textAlign="center"
     fontStyle="italic"
@@ -739,7 +841,7 @@ useEffect(() => {
   >
     "Language is a virus from outer space." -William S. Burroughs
   </Box>
-</Flex>
+</Box>
 
 </Flex>
 </ChakraProvider>
