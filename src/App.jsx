@@ -555,7 +555,7 @@ const randomizeSources = () => {
   const shuffledSources = shuffleArray([...availableSources]);
   
   // Select up to 10 sources
-  const maxSources = Math.min(25, shuffledSources.length);
+  const maxSources = Math.min(20, shuffledSources.length);
   const selectedCount = 2 + Math.floor(Math.random() * (maxSources - 1)); // At least 2, up to 10
   
   // Add each selected source
@@ -581,7 +581,7 @@ const randomizeSources = () => {
   
   // Show notification
   toast({ 
-    title: `Randomly selected ${selectedCount} sources!`, 
+    title: `Randomly selected ${selectedCount} sources`, 
     status: 'success',
     duration: 2000
   });
@@ -789,7 +789,7 @@ const randomizeSources = () => {
                   size="lg"
                   height="50px"
                   fontSize="xl"
-                  title="Cut sources up into magnetic tiles!"
+                  title="✂️ Cut sources up into magnetic tiles"
                 >
                   Cut!
                 </Button>
@@ -848,7 +848,7 @@ const randomizeSources = () => {
                     textAlign="center"
                     px={4}
                   >
-                    Select 2+ Sources
+                    Select a source...
                   </Text>
                 </Flex>
               ) : (
@@ -939,62 +939,61 @@ const randomizeSources = () => {
               {selectedSources.length} sources selected
             </Text>
             <HStack>
-            <Button
+            <IconButton
               size="xs"
               variant="outline"
               colorScheme="teal"
               onClick={addTiles}
-              leftIcon={<FaPlus />}
+              icon={<FaPlus />}
+              title="Add more tiles"
             >
-              Add More Tiles
-            </Button>
-            <Button
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={shuffleTiles}
-              leftIcon={<FaRandom />}
-            >
-              Shuffle Tiles
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
               size="xs"
               variant="outline"
               colorScheme="teal"
               onClick={randomizeSources}
-              leftIcon={<FaDiceFive />}
+              icon={<FaDiceFive />}
+              title="Cut up random sources"
             >
-              Random Sources
-            </Button>
-            <Button
+            <IconButton
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={shuffleTiles}
+              icon={<FaRandom />}
+              title="Shuffle tiles"
+
+            >
+            </IconButton>
+            </IconButton>
+            <IconButton
               size="xs"
               variant="outline"
               colorScheme="teal"
               onClick={generateTiles}
-              leftIcon={<FaCut />}
+              icon={<FaCut />}
+              title="Cut up selected sources again"
             >
-              Cut Sources
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
               size="xs"
               variant="outline"
               colorScheme="teal"
               onClick={exportImage}
-              leftIcon={<FaCloudDownloadAlt />}
+              icon={<FaCloudDownloadAlt />}
+              title="Save canvas to disk"
             >
-              Download Canvas
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
               size="xs"
               variant="outline"
               colorScheme="teal"
-              onClick={() => {
-                clearTiles()
-              }}
-              leftIcon={<FaTrash />}
+              onClick={clearTiles}
+              icon={<FaTrash />}
+              title="Clear all tiles."
             >
-              Clear Board
-            </Button>
+            </IconButton>
             </HStack>
           </Flex>
         )}
