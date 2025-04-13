@@ -5,7 +5,7 @@ import {
   Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
 } from '@chakra-ui/react';
 import { 
-  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaCopy, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
+  FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaMinus, FaCopy, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
   FaChevronUp, FaChevronDown as FaChevronExpand
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
@@ -499,10 +499,45 @@ const addTiles = () => {
   setTiles(prev => [...prev, ...newTiles]);
   toast({ 
     title: `Added ${newTiles.length} new tiles!`, 
-    status: 'success' 
+    status: 'success', 
+    duration: 650
   });
 };
 
+// Remove a random selection of tiles from the board
+const removeRandomTiles = () => {
+  // Get the current number of tiles
+  const tileCount = tiles.length;
+  
+  // If there are no tiles, show a warning and return
+  if (tileCount === 0) {
+    toast({
+      title: 'No tiles to remove!',
+      status: 'warning'
+    });
+    return;
+  }
+  
+  // Calculate how many tiles to remove (1-15, but not more than exist)
+  const maxRemoval = Math.min(tileCount, 15);
+  const removalCount = 1 + Math.floor(Math.random() * maxRemoval);
+  
+  // Create a copy of the current tiles and shuffle it
+  const shuffledTiles = shuffleArray([...tiles]);
+  
+  // Keep only the tiles that won't be removed
+  const remainingTiles = shuffledTiles.slice(removalCount);
+  
+  // Update the tiles state
+  setTiles(remainingTiles);
+  
+  // Show notification
+  toast({ 
+    title: `Removed ${removalCount} tile${removalCount !== 1 ? 's' : ''}!`, 
+    status: 'info', 
+    duration: 700
+  });
+};
   // Repositions existing tiles to random locations on the board
   const shuffleTiles = () => {
     // Make sure we have the latest board size
@@ -561,25 +596,6 @@ const addTiles = () => {
       link.click();
     });
     toast({ title: 'Canvas saved to disk!', status: 'success'});
-  };
-
-  // Copy to clipboard
-  const copyImageToClipboard = async () => {
-    try {
-      const canvas = await html2canvas(boardRef.current, { backgroundColor: '#f7fafc' });
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      
-      if (!blob) throw new Error("Failed to create image blob");
-  
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ]);
-  
-      toast({ title: 'Canvas copied to clipboard!', status: 'success' });
-    } catch (err) {
-      console.error('Failed to copy image:', err);
-      toast({ title: 'Failed to copy image', description: err.message, status: 'error' });
-    }
   };
   
 
@@ -647,7 +663,7 @@ const randomizeSources = () => {
   
   // Show notification
   toast({ 
-    title: `Randomly generated tiles from ${selectedCount} sources`, 
+    title: `Randomly selected ${selectedCount} sources`, 
     status: 'success',
     duration: 2000
   });
@@ -752,13 +768,6 @@ const randomizeSources = () => {
               title="🎲 Select random sources"
             >
             </IconButton>
-            <IconButton
-                colorScheme="teal"
-                onClick={addTiles}
-                icon={<FaPlus />}
-                title="➕ Add more tiles"
-              >
-                </IconButton>
             <Input
               placeholder="Paste text here... ⤵"
               value={inputText}
@@ -784,6 +793,20 @@ const randomizeSources = () => {
                 colorScheme="blue"
                 title="⬇💾 Download canvas"
               />
+              <IconButton
+                colorScheme="teal"
+                onClick={addTiles}
+                icon={<FaPlus />}
+                title="➕ Add more tiles"
+              >
+              </IconButton>
+              <IconButton
+                colorScheme="red"
+                onClick={removeRandomTiles}
+                icon={<FaMinus />}
+                title="➖ Remove some tiles"
+              >
+            </IconButton>
               <IconButton
                 colorScheme="pink"
                 onClick={shuffleTiles}
@@ -897,7 +920,7 @@ const randomizeSources = () => {
                       toast({ title: 'All sources cleared!', status: 'info'});
                     }}
                   >
-                    Remove All
+                    Clear All
                   </Button>
                 )}
               </Flex>
@@ -1013,6 +1036,15 @@ const randomizeSources = () => {
               {selectedSources.length} sources selected
             </Text>
             <HStack>
+            <IconButton
+              size="xs"
+              variant="outline"
+              colorScheme="teal"
+              onClick={removeRandomTiles}
+              icon={<FaMinus />}
+              title="➖ Remove some tiles"
+              >
+            </IconButton>
             <IconButton
               size="xs"
               variant="outline"
