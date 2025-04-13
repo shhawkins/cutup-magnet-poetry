@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && git add . && git commit -m \"deploy updates\" && git push origin main && git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",

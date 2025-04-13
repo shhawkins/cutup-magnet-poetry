@@ -794,19 +794,19 @@ const randomizeSources = () => {
                 title="⬇💾 Download canvas"
               />
               <IconButton
-                colorScheme="teal"
-                onClick={addTiles}
-                icon={<FaPlus />}
-                title="➕ Add more tiles"
-              >
-              </IconButton>
-              <IconButton
                 colorScheme="red"
                 onClick={removeRandomTiles}
                 icon={<FaMinus />}
                 title="➖ Remove some tiles"
               >
             </IconButton>
+              <IconButton
+                colorScheme="teal"
+                onClick={addTiles}
+                icon={<FaPlus />}
+                title="➕ Add more tiles"
+              >
+              </IconButton>
               <IconButton
                 colorScheme="pink"
                 onClick={shuffleTiles}
