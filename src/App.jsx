@@ -714,7 +714,7 @@ const randomizeSources = () => {
             >
             </IconButton>
             <Input
-              placeholder="Type here and press enter..."
+              placeholder="Type here..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
@@ -982,6 +982,7 @@ const randomizeSources = () => {
               icon={<FaDiceFive />}
               title="🎲 Cut up random sources"
             >
+            </IconButton>
             <IconButton
               size="xs"
               variant="outline"
@@ -989,9 +990,7 @@ const randomizeSources = () => {
               onClick={shuffleTiles}
               icon={<FaRandom />}
               title="🔀 Shuffle tiles"
-
             >
-            </IconButton>
             </IconButton>
             <IconButton
               size="xs"
