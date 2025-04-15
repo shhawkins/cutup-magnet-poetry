@@ -2,11 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   ChakraProvider, Box, Flex, VStack, HStack, Button, IconButton, Input,
   Text, Divider, useToast, extendTheme,
-  Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton
+  Icon, Popover, PopoverTrigger, PopoverContent, PopoverBody, CloseButton,
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, 
+  ModalCloseButton, ModalFooter, useDisclosure,
+  FormControl, FormLabel, List, ListItem, Link, Image, PopoverArrow, PopoverCloseButton, PopoverHeader
 } from '@chakra-ui/react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import { 
   FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaMinus, FaCopy, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
-  FaChevronUp, FaChevronDown as FaChevronExpand
+  FaChevronUp, FaChevronDown as FaChevronExpand, FaUndo, FaRedo, FaSave, FaFolderOpen, FaSyncAlt, FaPlay, FaPause
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
@@ -30,6 +34,20 @@ function App() {
   const [showSourceSection, setShowSourceSection] = useState(true);
   const appContainerRef = useRef(null);
   const footerRef = useRef(null);
+  const [history, setHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const isUndoRedoAction = useRef(false);
+  const [savedCanvases, setSavedCanvases] = useState([]);
+  const [canvasName, setCanvasName] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalMode, setModalMode] = useState('save'); // 'save' or 'load'
+  const [selectedSourceForDetails, setSelectedSourceForDetails] = useState(null);
+  const [isSourceDetailsOpen, setIsSourceDetailsOpen] = useState(false);
+  const [previewCanvas, setPreviewCanvas] = useState(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [showFooter, setShowFooter] = useState(true);
+  const [pauseQuotes, setPauseQuotes] = useState(false);
+  const [showSavedCanvases, setShowSavedCanvases] = useState(true);
 
   // Literary quotes that cycle in the footer
   const quotes = [
@@ -40,7 +58,7 @@ function App() {
     { text: `⏲️ "If I waited for perfection, I wouldn't write a thing."`, author: "Margaret Atwood" },
     { text: `🖋️ "You can always edit a bad page. You can't edit a blank page."`, author: "Jodi Picoult" },
     { text: `🧵 "Art is never finished, only abandoned."`, author: "Leonardo da Vinci" },
-    { text: `☠️ "Have no fear of perfection, you’ll never reach it."`, author: "Salvador Dali" },
+    { text: `☠️ "Have no fear of perfection, you'll never reach it."`, author: "Salvador Dali" },
     { text: `🗣️ "Creativity is contagious, pass it on."`, author: "Albert Einstein" },
     { text: `🩸 "Writing is easy. You only need to stare at a blank piece of paper until drops of blood form on your forehead."`, author: "Gene Fowler" },
     { text: `📚 "Originality is nothing but judicious imitation."`, author: "Voltaire" },
@@ -49,15 +67,15 @@ function App() {
     { text: `☀️ "A man is a success if he gets up in the morning and gets to bed at night, and in between he does what he wants to do."`, author: "Bob Dylan" },
     { text: `🌌 "The world of reality has its limits; the world of imagination is boundless."`, author: "Jean-Jacques Rousseau" },
     { text: `🌀 "Those who do not want to imitate anything, produce nothing."`, author: "Salvador Dali" },
-    { text: `🗨️ "Be who you are and say what you feel because those who mind don’t matter and those who matter don’t mind."`, author: "Dr. Seuss" },
-    { text: `🌍 "The artist’s world is limitless. It can be found anywhere, far from where he lives or a few feet away. It is always on his doorstep."`, author: "Paul Strand" },
+    { text: `🗨️ "Be who you are and say what you feel because those who mind don't matter and those who matter don't mind."`, author: "Dr. Seuss" },
+    { text: `🌍 "The artist's world is limitless. It can be found anywhere, far from where he lives or a few feet away. It is always on his doorstep."`, author: "Paul Strand" },
     { text: `🔍 "Creativity is piercing the mundane to find the marvelous."`, author: "Bill Moyers" },
     { text: `🎯 "Creativity is allowing yourself to make mistakes. Art is knowing which ones to keep."`, author: "Scott Adams" },
     { text: `🌪️ "I accept chaos, I'm not sure whether it accepts me."`, author: "Bob Dylan" },
     { text: `💡 "My reality needs imagination like a bulb needs a socket. My imagination needs reality like a blind man needs a cane."`, author: "Tom Waits" },
     { text: `🚫 "Don't try."`, author: "Charles Bukowski" },
-    { text: `🧭 "To create one’s own world takes courage."`, author: "Georgia O'Keefe" },
-    { text: `🌱 "To practice any art, no matter how well or how badly, is a way to make your soul grow, for heaven’s sake. So do it."`, author: "Kurt Vonnegut" },
+    { text: `🧭 "To create one's own world takes courage."`, author: "Georgia O'Keefe" },
+    { text: `🌱 "To practice any art, no matter how well or how badly, is a way to make your soul grow, for heaven's sake. So do it."`, author: "Kurt Vonnegut" },
     { text: `🧠 "In the future, everyone will be famous for 15 minutes."`, author: "Andy Warhol" },
     { text: `🕳️ "I am not strange. I am just not normal."`, author: "Salvador Dali" },
     { text: `🩹 "When you cut into the present, the future leaks out."`, author: "William S. Burroughs" },
@@ -71,12 +89,16 @@ const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
 // Add this useEffect to change quotes periodically
 useEffect(() => {
-  const quoteTimer = setInterval(() => {
-    setCurrentQuoteIndex(prevIndex => (prevIndex + 1) % quotes.length);
-  }, 8000); // Change quote every 8 seconds
+  if (pauseQuotes) return; // Don't set up the interval if paused
   
-  return () => clearInterval(quoteTimer); // Clean up on unmount
-}, []);
+  const interval = setInterval(() => {
+    setCurrentQuoteIndex(prevIndex => 
+      prevIndex === quotes.length - 1 ? 0 : prevIndex + 1
+    );
+  }, 12000);
+  
+  return () => clearInterval(interval);
+}, [pauseQuotes, quotes.length]);
   
   // Custom theme for fonts
 const theme = extendTheme({
@@ -304,7 +326,13 @@ const cutUpText = (text) => {
       title: sourceInfo.title,
       snippet,
       color: textSources[category].color,
-      icon: sourceInfo.icon
+      icon: sourceInfo.icon,
+      author: sourceInfo.author,
+      year: sourceInfo.year,
+      language: sourceInfo.language,
+      gutenbergLink: sourceInfo.gutenbergLink,
+      context: sourceInfo.context,
+      influence: sourceInfo.influence
     };
     
     setSelectedSources(prev => [...prev, newSource]);
@@ -435,6 +463,7 @@ const cutUpText = (text) => {
   });
 
   setTiles(positionedTiles);
+  saveToHistory(positionedTiles);
   };
 
 // Add more tiles to the existing board
@@ -502,6 +531,7 @@ const addTiles = () => {
     status: 'success', 
     duration: 650
   });
+  saveToHistory(newTiles);
 };
 
 // Remove a random selection of tiles from the board
@@ -537,6 +567,7 @@ const removeRandomTiles = () => {
     status: 'info', 
     duration: 700
   });
+  saveToHistory(remainingTiles);
 };
   // Repositions existing tiles to random locations on the board
   const shuffleTiles = () => {
@@ -585,17 +616,48 @@ const removeRandomTiles = () => {
     
     // Update state with new tile objects
     setTiles(repositionedTiles);
+    saveToHistory(repositionedTiles);
   };
 
-  // Export as image
+  // Export as image with temporary header and no toolbar
   const exportImage = () => {
+    // Create temporary header element
+    const header = document.createElement('div');
+    header.id = 'temp-export-header';
+    header.style.position = 'absolute';
+    header.style.top = '10px';
+    header.style.left = '10px';
+    header.style.fontWeight = 'bold';
+    header.style.fontSize = '24px';
+    header.style.color = '#333';
+    header.style.zIndex = '1000';
+    header.innerHTML = '✂️ cut up';
+    
+    // Hide all toolbar buttons temporarily
+    const toolbarButtons = document.querySelectorAll('.source-toolbar, .canvas-toolbar');
+    toolbarButtons.forEach(el => {
+      el.style.display = 'none';
+    });
+    
+    // Add the temporary header to the board
+    boardRef.current.appendChild(header);
+    
+    // Capture the canvas
     html2canvas(boardRef.current, { backgroundColor: '#f7fafc' }).then(canvas => {
+      // Create and click download link
       const link = document.createElement('a');
       link.download = 'cut-up-poetry.jpg';
       link.href = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG at 70% quality
       link.click();
+      
+      // Restore original UI
+      boardRef.current.removeChild(header);
+      toolbarButtons.forEach(el => {
+        el.style.display = '';
+      });
+      
+      toast({ title: 'Canvas saved to disk!', status: 'success'});
     });
-    toast({ title: 'Canvas saved to disk!', status: 'success'});
   };
   
 
@@ -607,10 +669,8 @@ const removeRandomTiles = () => {
 
   // Toggle source section
   const toggleSourceSection = () => {
-    setShowSourceSection(!showSourceSection);
-    
-    // After toggling, update board size
-    setTimeout(updateBoardSize, 100);
+    console.log("Toggle source section from", showSourceSection, "to", !showSourceSection);
+    setShowSourceSection(prev => !prev);
   };
 
   // Function to randomly select up to 10 new sources
@@ -668,10 +728,7 @@ const randomizeSources = () => {
     duration: 2000
   });
   
-  // Automatically generate new cut-up tiles
-  setTimeout(() => {
-    generateTiles();
-  }, 500);
+
 };
 
   // Update board size when window is resized
@@ -690,6 +747,172 @@ const randomizeSources = () => {
   useEffect(() => {
     updateBoardSize();
   }, [selectedSources, showSourceSection]);
+
+  // Add this function to save state to history
+  const saveToHistory = (newTiles) => {
+    if (isUndoRedoAction.current) {
+      isUndoRedoAction.current = false;
+      return;
+    }
+    
+    // If we're not at the end of history, truncate it
+    if (historyIndex !== history.length - 1) {
+      setHistory(history.slice(0, historyIndex + 1));
+    }
+    
+    // Add the new state to history
+    setHistory(prev => [...prev, [...newTiles]]);
+    setHistoryIndex(prev => prev + 1);
+  };
+
+  // Add these undo/redo functions
+  const undo = () => {
+    if (historyIndex > 0) {
+      isUndoRedoAction.current = true;
+      setHistoryIndex(prev => prev - 1);
+      setTiles(history[historyIndex - 1]);
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      isUndoRedoAction.current = true;
+      setHistoryIndex(prev => prev + 1);
+      setTiles(history[historyIndex + 1]);
+    }
+  };
+
+  // Load saved canvases from localStorage on init
+  useEffect(() => {
+    const saved = localStorage.getItem('savedCanvases');
+    if (saved) {
+      setSavedCanvases(JSON.parse(saved));
+    }
+  }, []);
+
+  // Save canvas with thumbnail
+  const saveCanvas = () => {
+    if (!canvasName.trim()) {
+      toast({
+        title: 'Please enter a name for your canvas',
+        status: 'warning'
+      });
+      return;
+    }
+
+    // Create temporary header element
+    const header = document.createElement('div');
+    header.id = 'temp-export-header';
+    header.style.position = 'absolute';
+    header.style.top = '10px';
+    header.style.left = '10px';
+    header.style.fontWeight = 'bold';
+    header.style.fontSize = '16px';
+    header.style.color = '#333';
+    header.style.zIndex = '1000';
+    header.innerHTML = '✂️ cut up';
+    
+    // Hide all toolbar buttons temporarily
+    const toolbarButtons = document.querySelectorAll('.source-toolbar, .canvas-toolbar');
+    toolbarButtons.forEach(el => {
+      el.style.display = 'none';
+    });
+    
+    // Add the temporary header to the board
+    boardRef.current.appendChild(header);
+
+    // Capture thumbnail of current canvas
+    html2canvas(boardRef.current, { backgroundColor: '#f7fafc' }).then(canvas => {
+      // Remove header and restore UI
+      boardRef.current.removeChild(header);
+      toolbarButtons.forEach(el => {
+        el.style.display = '';
+      });
+      
+      const thumbnail = canvas.toDataURL('image/jpeg', 0.3); // Low quality for thumbnail
+      
+      const newCanvas = {
+        id: Date.now(),
+        name: canvasName,
+        tiles: [...tiles],
+        sources: [...selectedSources],
+        date: new Date().toISOString(),
+        thumbnail // Store the thumbnail data URL
+      };
+      
+      const updatedCanvases = [...savedCanvases, newCanvas];
+      setSavedCanvases(updatedCanvases);
+      localStorage.setItem('savedCanvases', JSON.stringify(updatedCanvases));
+      
+      setCanvasName('');
+      onClose();
+      
+      toast({
+        title: 'Canvas saved!',
+        status: 'success'
+      });
+    });
+  };
+
+  const loadCanvas = (canvas) => {
+    setTiles(canvas.tiles);
+    setSelectedSources(canvas.sources);
+    
+    // Update history
+    saveToHistory(canvas.tiles);
+    
+    onClose();
+    
+    toast({
+      title: `Loaded "${canvas.name}"`,
+      status: 'success'
+    });
+  };
+
+  const deleteCanvas = (id, e) => {
+    e.stopPropagation();
+    const updatedCanvases = savedCanvases.filter(canvas => canvas.id !== id);
+    setSavedCanvases(updatedCanvases);
+    localStorage.setItem('savedCanvases', JSON.stringify(updatedCanvases));
+    
+    toast({
+      title: 'Canvas deleted',
+      status: 'info'
+    });
+  };
+
+  // Add this function to handle clicking on a source card
+  const viewSourceDetails = (source) => {
+    setSelectedSourceForDetails(source);
+    setIsSourceDetailsOpen(true);
+  };
+
+  // Add this function to close the source details modal
+  const closeSourceDetails = () => {
+    setSelectedSourceForDetails(null);
+    setIsSourceDetailsOpen(false);
+  };
+
+  // Add this function to handle preview
+  const openCanvasPreview = (canvas, e) => {
+    if (e) e.stopPropagation();
+    setPreviewCanvas(canvas);
+    setIsPreviewOpen(true);
+  };
+
+  // Add this function to close the preview
+  const closeCanvasPreview = () => {
+    setPreviewCanvas(null);
+    setIsPreviewOpen(false);
+  };
+
+  // Add this function to load a canvas from the preview
+  const loadFromPreview = () => {
+    if (previewCanvas) {
+      loadCanvas(previewCanvas);
+      closeCanvasPreview();
+    }
+  };
 
   return (
     <ChakraProvider theme={theme}>
@@ -735,17 +958,20 @@ const randomizeSources = () => {
     </Text>
   </Box>
   
-  <Button
-    size="sm"
-    variant="ghost"
-    leftIcon={showSourceSection ? <FaExpand /> : <FaCompress />}
-    rightIcon={showSourceSection ? <FaChevronUp /> : <FaChevronExpand />}
-    onClick={toggleSourceSection}
-    _hover={{ bg: "gray.100" }}
-    title="📺 Toggle fullscreen"
-  >
-    {showSourceSection ? "Hide Sources" : "Show Sources"}
-  </Button>
+  {/* Toggle Source Section button - only show when sources are visible */}
+  {showSourceSection && (
+    <Button
+      size="sm"
+      variant="ghost"
+      leftIcon={<FaExpand />}
+      rightIcon={<FaChevronUp />}
+      onClick={toggleSourceSection}
+      _hover={{ bg: "gray.100" }}
+      title="📺 Toggle fullscreen"
+    >
+      Hide Sources
+    </Button>
+  )}
 </Flex>
         
         {/* Sources Section - Collapsible */}
@@ -760,60 +986,20 @@ const randomizeSources = () => {
             borderColor="gray.300"
           >
             {/* Text Input Box */}
-            <HStack width="full">
-            <IconButton
-              icon={<FaDiceFive />}
-              onClick={randomizeSources}
-              colorScheme="blue"
-              title="🎲 Select random sources"
-            >
-            </IconButton>
-            <Input
-              placeholder="Paste text here... ⤵"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && addCustomText()}
-            />
-              {/* <IconButton
-                icon={<FaCopy />}
-                onClick={copyImageToClipboard}
-                aria-label="Copy"
-                colorScheme="green"
-                title="Copy canvas"
-              /> */}
+            <HStack width="full" mb={2}>
               <IconButton
-                icon={<FaTrash />}
-                onClick={clearTiles}
-                colorScheme="red"
-                title="❌ Clear all tiles"
-              />
-              <IconButton
-                icon={<FaCloudDownloadAlt />}
-                onClick={exportImage}
+                icon={<FaDiceFive />}
+                onClick={randomizeSources}
                 colorScheme="blue"
-                title="⬇💾 Download canvas"
+                title="🎲 Select random sources"
               />
-              <IconButton
-                colorScheme="red"
-                onClick={removeRandomTiles}
-                icon={<FaMinus />}
-                title="➖ Remove some tiles"
-              >
-            </IconButton>
-              <IconButton
-                colorScheme="teal"
-                onClick={addTiles}
-                icon={<FaPlus />}
-                title="➕ Add more tiles"
-              >
-              </IconButton>
-              <IconButton
-                colorScheme="pink"
-                onClick={shuffleTiles}
-                icon={<FaRandom />}
-                title="🔀 Shuffle tiles"                
-              >
-              </IconButton>
+              <Input
+                placeholder="Paste text here..."
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                flex="1"
+              />
+
             </HStack>
             
             {/* Category Buttons and Cut Up Button */}
@@ -831,8 +1017,8 @@ const randomizeSources = () => {
                   width="full"
                 >
                   {Object.keys(textSources).map(category => (
-                    <Popover key={category} placement="bottom" closeOnBlur={true}>
-                      {({ onClose }) => (
+                    <Popover key={category} placement="bottom-start">
+                      {({ isOpen, onClose }) => (
                         <>
                           <PopoverTrigger>
                             <Button
@@ -850,6 +1036,27 @@ const randomizeSources = () => {
                           </PopoverTrigger>
                           <PopoverContent width="220px" boxShadow="md">
                             <PopoverBody p={2}>
+                              <Flex justify="space-between" align="center" mb={2}>
+                                <Text fontWeight="bold" fontSize="sm">
+                                  {textSources[category].name}
+                                </Text>
+                                <IconButton
+                                  icon={<FaSyncAlt />}
+                                  size="xs"
+                                  variant="ghost"
+                                  aria-label="Refresh sources"
+                                  title="🔄 Refresh sources list"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toast({
+                                      title: "Coming soon!",
+                                      description: "In the future, this will refresh the list with new random sources.",
+                                      status: "info",
+                                      duration: 2000,
+                                    });
+                                  }}
+                                />
+                              </Flex>
                               <VStack align="stretch" spacing={1}>
                                 {Object.keys(textSources[category].sources).map(sourceKey => (
                                   <Button
@@ -909,19 +1116,27 @@ const randomizeSources = () => {
                   Sources: {selectedSources.length}
                 </Text>
                 {selectedSources.length > 0 && (
-                  <Button
-                    size="xs"
-                    colorScheme="red"
-                    borderRadius="full"
-                    title="❌ Clear all sources"
-                    onClick={() => {
-                      setSelectedSources([]);
-                      setCustomTexts([]);
-                      toast({ title: 'All sources cleared!', status: 'info'});
-                    }}
-                  >
-                    Clear All
-                  </Button>
+                  <HStack spacing={2}>
+                    <IconButton
+                      icon={<FaDiceFive />}
+                      onClick={randomizeSources}
+                      size="sm" 
+                      colorScheme="blue"
+                      title="🎲 Select random sources"
+                    />
+                    <IconButton
+                      icon={<FaTrash />}
+                      onClick={() => {
+                        setSelectedSources([]);
+                        setCustomTexts([]);
+                        toast({ title: 'All sources cleared!', status: 'info'});
+                      }}
+                      size="sm" 
+                      colorScheme="red"
+                      className="toolbar-element"
+                      title="☠️ Clear all sources"
+                    />
+                  </HStack>
                 )}
               </Flex>
               
@@ -967,6 +1182,10 @@ const randomizeSources = () => {
                         height={{ base: "120px", md: "150px" }}
                         position="relative"
                         overflow="hidden"
+                        onClick={() => viewSourceDetails(source)}
+                        cursor="pointer"
+                        transition="transform 0.2s"
+                        _hover={{ transform: "scale(1.03)" }}
                       >
                         <IconButton
                           icon={<FaDiceFive/>}
@@ -974,14 +1193,16 @@ const randomizeSources = () => {
                           position="absolute"
                           right="20px" 
                           top="2px"
-                          onClick={() => refreshSourceSnippet(source.id)}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent the card click event
+                            refreshSourceSnippet(source.id);
+                          }}
                           aria-label="Refresh snippet"
                           variant="ghost"
                           _focus={{ boxShadow: "none" }}
                           _hover={{ outline: "none" }}
                           _focusVisible={{ boxShadow: "none" }}
                           mr="5px"
-
                           title="🔄 Get new snippet"
                         />
                         <CloseButton
@@ -989,7 +1210,10 @@ const randomizeSources = () => {
                           position="absolute"
                           right="2px"
                           top="2px"
-                          onClick={() => removeSource(source.id)}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent the card click event
+                            removeSource(source.id);
+                          }}
                           title="❌ Close source"
                         />
                         <VStack height="full" align="start" spacing={1}>
@@ -997,10 +1221,10 @@ const randomizeSources = () => {
                             {source.icon && <Icon as={source.icon} />}
                             <Text 
                               fontWeight="bold" 
-                              fontSize="xs"        // Smaller font size (from "sm" to "xs")
-                              noOfLines={2}        // Allow up to 2 lines instead of 1
-                              wordBreak="break-word" // Force word wrapping
-                              width="calc(100% - 20px)" // Allow space for the icon
+                              fontSize="xs"
+                              noOfLines={2}
+                              wordBreak="break-word"
+                              width="calc(100% - 20px)"
                               paddingRight="6px"
                               paddingTop="11px"
                             >
@@ -1021,12 +1245,12 @@ const randomizeSources = () => {
         )}
 
         {/* Minimized Source Section Indicator (when hidden) */}
-        {!showSourceSection && selectedSources.length > 0 && (
-          <Flex
+        {!showSourceSection && (
+          <Flex 
             width="100%"
             bg="gray.100"
-            px={4}
-            py={2}
+            px={4} 
+            py={2} 
             alignItems="center"
             justifyContent="space-between"
             borderBottom="2px solid"
@@ -1035,71 +1259,111 @@ const randomizeSources = () => {
             <Text fontSize="sm" fontWeight="medium">
               {selectedSources.length} sources selected
             </Text>
-            <HStack>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={removeRandomTiles}
-              icon={<FaMinus />}
-              title="➖ Remove some tiles"
+            
+            <Flex align="center" gap={6}>
+              {/* Group 1: Main actions */}
+              <HStack spacing={1}>
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={clearTiles}
+                  icon={<FaTrash />}
+                  className="toolbar-element"
+                  title="☠️ Clear all tiles"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="blue"
+                  onClick={exportImage}
+                  icon={<FaCloudDownloadAlt />}
+                  title="⬇️ Save canvas to disk"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="green"
+                  onClick={() => {
+                    setModalMode('save');
+                    onOpen();
+                  }}
+                  icon={<FaSave />}
+                  title="💾 Save canvas"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="yellow"
+                  onClick={() => {
+                    setModalMode('load');
+                    onOpen();
+                  }}
+                  icon={<FaFolderOpen />}
+                  title="📂 Load canvas"
+                />
+              </HStack>
+              
+              {/* Group 2: Tile count management */}
+              <HStack spacing={1}>
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={removeRandomTiles}
+                  icon={<FaMinus />}
+                  title="➖ Remove some tiles"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="teal"
+                  onClick={addTiles}
+                  icon={<FaPlus />}
+                  title="➕ Add more tiles"
+                />
+              </HStack>
+              
+              {/* Group 3: History and shuffle */}
+              <HStack spacing={1}>
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="blue"
+                  onClick={undo}
+                  isDisabled={historyIndex <= 0}
+                  icon={<FaUndo />}
+                  title="↩️ Undo"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="blue"
+                  onClick={redo}
+                  isDisabled={historyIndex >= history.length - 1}
+                  icon={<FaRedo />}
+                  title="↪️ Redo"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="pink"
+                  onClick={shuffleTiles}
+                  icon={<FaRandom />}
+                  title="🔀 Shuffle tiles"
+                />
+              </HStack>
+              
+              {/* Show Sources button */}
+              <Button
+                size="xs"
+                leftIcon={<FaChevronExpand />}
+                onClick={() => setShowSourceSection(true)}
+                variant="outline"
               >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={addTiles}
-              icon={<FaPlus />}
-              title="➕ Add more tiles"
-            >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={randomizeSources}
-              icon={<FaDiceFive />}
-              title="🎲 Cut up random sources"
-            >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={shuffleTiles}
-              icon={<FaRandom />}
-              title="🔀 Shuffle tiles"
-            >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={generateTiles}
-              icon={<FaCut />}
-              title="✂️ Cut up selected sources"
-            >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={exportImage}
-              icon={<FaCloudDownloadAlt />}
-              title="⬇️ 💾 Save canvas to disk"
-            >
-            </IconButton>
-            <IconButton
-              size="xs"
-              variant="outline"
-              colorScheme="teal"
-              onClick={clearTiles}
-              icon={<FaTrash />}
-              title="☠️ Clear all tiles"
-            >
-            </IconButton>
-            </HStack>
+                Show Sources
+              </Button>
+            </Flex>
           </Flex>
         )}
 
@@ -1134,6 +1398,118 @@ const randomizeSources = () => {
           overflowX="hidden"
           overlowY="scroll"
         >
+          {/* Only show toolbar when source section is visible */}
+          {showSourceSection && (
+            <Flex 
+              width="100%" 
+              justifyContent="center" 
+              mb={4} 
+              mt={2}
+            >
+              <Flex 
+                align="center" 
+                gap={6} 
+                justifyContent="center" 
+                bg="gray.50"
+                p={3}
+                borderRadius="md"
+                boxShadow="sm"
+              >
+                {/* Group 1: Main actions */}
+                <HStack spacing={1}>
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="red"
+                    onClick={clearTiles}
+                    icon={<FaTrash />}
+                    title="☠️ Clear all tiles"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="blue"
+                    onClick={exportImage}
+                    icon={<FaCloudDownloadAlt />}
+                    title="⬇️ Save canvas to disk"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="green"
+                    onClick={() => {
+                      setModalMode('save');
+                      onOpen();
+                    }}
+                    icon={<FaSave />}
+                    title="💾 Save canvas"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="yellow"
+                    onClick={() => {
+                      setModalMode('load');
+                      onOpen();
+                    }}
+                    icon={<FaFolderOpen />}
+                    title="📂 Load canvas"
+                  />
+                </HStack>
+                
+                {/* Group 2: Tile count management */}
+                <HStack spacing={1}>
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="red"
+                    onClick={removeRandomTiles}
+                    icon={<FaMinus />}
+                    title="➖ Remove some tiles"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="teal"
+                    onClick={addTiles}
+                    icon={<FaPlus />}
+                    title="➕ Add more tiles"
+                  />
+                </HStack>
+                
+                {/* Group 3: History and shuffle */}
+                <HStack spacing={1}>
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="blue"
+                    onClick={undo}
+                    isDisabled={historyIndex <= 0}
+                    icon={<FaUndo />}
+                    title="↩️ Undo"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="blue"
+                    onClick={redo}
+                    isDisabled={historyIndex >= history.length - 1}
+                    icon={<FaRedo />}
+                    title="↪️ Redo"
+                  />
+                  <IconButton
+                    size="xs"
+                    variant="outline"
+                    colorScheme="pink"
+                    onClick={shuffleTiles}
+                    icon={<FaRandom />}
+                    title="🔀 Shuffle tiles"
+                  />
+                </HStack>
+              </Flex>
+            </Flex>
+          )}
+
           {tiles.map(tile => (
             <Draggable
               key={tile.id}
@@ -1240,21 +1616,519 @@ const randomizeSources = () => {
     /> */}
   </HStack>
   
-{/* Quote Footer - Hide on small screens */}
-  <Box
-    as="footer"
-    display={{ base: "none", md: "block" }}
-    mt={3}
-    mb={7}
-    textAlign="center"
-    fontStyle="italic"
-    color="gray.600"
-    fontSize="sm"
-    ref={footerRef}
-  >
-     {quotes[currentQuoteIndex].text} -{quotes[currentQuoteIndex].author}
-  </Box>
+{/* Quote Footer with proper hide/show functionality */}
+<Box
+  as="footer"
+  display={showFooter ? { base: "none", md: "block" } : "none"}
+  mt={3}
+  mb={7}
+  textAlign="center"
+  fontStyle="italic"
+  color="gray.600"
+  fontSize="sm"
+  ref={footerRef}
+  position="relative"
+  bottom="0"
+>
+  <Flex justify="center" align="center">
+    <Text>
+      {quotes[currentQuoteIndex].text} - {quotes[currentQuoteIndex].author}
+    </Text>
+    
+    {/* Subtle controls */}
+    <HStack 
+      position="absolute" 
+      right="2" 
+      opacity="0.4" 
+      _hover={{ opacity: "1" }}
+      transition="opacity 0.2s"
+    >
+      <IconButton
+        icon={pauseQuotes ? <FaPlay size="8px" /> : <FaPause size="8px" />}
+        size="xs"
+        variant="ghost"
+        onClick={() => setPauseQuotes(!pauseQuotes)}
+        color="gray.600"
+        aria-label={pauseQuotes ? "Resume quotes" : "Pause quotes"}
+        title={pauseQuotes ? "Resume quotes" : "Pause quotes"}
+      />
+      <IconButton
+        icon={<FaChevronDown size="8px" />}
+        size="xs"
+        variant="ghost"
+        onClick={() => setShowFooter(false)}
+        color="gray.600"
+        aria-label="Hide footer"
+        title="Hide footer"
+      />
+    </HStack>
+  </Flex>
 </Box>
+
+{/* Add a button to show the footer when hidden */}
+{!showFooter && (
+  <IconButton
+    position="fixed"
+    bottom="2"
+    right="2"
+    size="xs"
+    icon={<FaChevronUp size="10px" />}
+    onClick={() => setShowFooter(true)}
+    variant="outline"
+    color="gray.500"
+    bg="white"
+    opacity="0.6"
+    _hover={{ opacity: "1" }}
+    aria-label="Show footer"
+    title="Show footer"
+    zIndex={10}
+  />
+)}
+</Box>
+
+{/* Save/Load Canvas Modal */}
+<Modal isOpen={isOpen} onClose={onClose}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>
+      {modalMode === 'save' ? 'Save Canvas' : 'Load Canvas'}
+    </ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+      {modalMode === 'load' ? (
+        savedCanvases.length > 0 ? (
+          <List spacing={3}>
+            {savedCanvases.map(canvas => (
+              <ListItem 
+                key={canvas.id}
+                p={3}
+                borderWidth="1px"
+                borderRadius="md"
+                cursor="pointer"
+                onClick={(e) => openCanvasPreview(canvas, e)}
+                _hover={{ bg: "gray.100" }}
+              >
+                <Flex align="center">
+                  {canvas.thumbnail ? (
+                    <Image 
+                      src={canvas.thumbnail} 
+                      alt={canvas.name}
+                      boxSize="60px"
+                      mr={3}
+                      borderRadius="md"
+                      objectFit="cover"
+                    />
+                  ) : (
+                    <Box 
+                      boxSize="60px"
+                      mr={3}
+                      borderRadius="md"
+                      bg="gray.100"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Icon as={FaDice} boxSize={4} color="gray.400" />
+                    </Box>
+                  )}
+                  
+                  <Box flex="1">
+                    <Text fontWeight="bold">{canvas.name}</Text>
+                    <Text fontSize="sm" color="gray.500">
+                      {new Date(canvas.date).toLocaleString()}
+                    </Text>
+                  </Box>
+                </Flex>
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Text>No saved canvases found.</Text>
+        )
+      ) : (
+        <FormControl>
+          <FormLabel>Canvas Name</FormLabel>
+          <Input 
+            value={canvasName}
+            onChange={(e) => setCanvasName(e.target.value)}
+            placeholder="My Canvas"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                saveCanvas();
+              }
+            }}
+          />
+        </FormControl>
+      )}
+    </ModalBody>
+    <ModalFooter>
+      {modalMode === 'save' && (
+        <Button 
+          colorScheme="blue" 
+          mr={3} 
+          onClick={saveCanvas}
+          isDisabled={!canvasName.trim() || tiles.length === 0}
+        >
+          Save
+        </Button>
+      )}
+      <Button variant="ghost" onClick={onClose}>
+        Cancel
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+
+{/* Source Details Modal */}
+<Modal isOpen={isSourceDetailsOpen} onClose={closeSourceDetails} size="lg">
+  <ModalOverlay />
+  <ModalContent>
+    {selectedSourceForDetails && (
+      <>
+        <ModalHeader>
+          <Flex align="center">
+            {selectedSourceForDetails.icon && <Icon as={selectedSourceForDetails.icon} mr={2} />}
+            {selectedSourceForDetails.title}
+          </Flex>
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <VStack spacing={4} align="stretch">
+            {/* Source metadata */}
+            <Box bg={selectedSourceForDetails.color} p={4} borderRadius="md">
+              <HStack spacing={4} wrap="wrap">
+                {selectedSourceForDetails.author && (
+                  <Box>
+                    <Text fontWeight="bold">Author</Text>
+                    <Text>{selectedSourceForDetails.author}</Text>
+                  </Box>
+                )}
+                {selectedSourceForDetails.year && (
+                  <Box>
+                    <Text fontWeight="bold">Year</Text>
+                    <Text>{selectedSourceForDetails.year}</Text>
+                  </Box>
+                )}
+                {selectedSourceForDetails.language && (
+                  <Box>
+                    <Text fontWeight="bold">Original Language</Text>
+                    <Text>{selectedSourceForDetails.language}</Text>
+                  </Box>
+                )}
+              </HStack>
+            </Box>
+            
+            {/* Source context and influence */}
+            {selectedSourceForDetails.context && (
+              <Box>
+                <Text fontWeight="bold">Context</Text>
+                <Text>{selectedSourceForDetails.context}</Text>
+              </Box>
+            )}
+            {selectedSourceForDetails.influence && (
+              <Box>
+                <Text fontWeight="bold">Influence</Text>
+                <Text>{selectedSourceForDetails.influence}</Text>
+              </Box>
+            )}
+            
+            {/* Text snippet */}
+            <Box>
+              <Text fontWeight="bold">Text Snippet</Text>
+              <Box maxH="200px" overflowY="auto" bg="gray.50" p={3} borderRadius="md">
+                <Text>{selectedSourceForDetails.snippet}</Text>
+              </Box>
+            </Box>
+            
+            {/* Project Gutenberg link */}
+            {selectedSourceForDetails.gutenbergLink && (
+              <Link href={selectedSourceForDetails.gutenbergLink} isExternal color="blue.500">
+                Download from Project Gutenberg <Icon as={FaExternalLinkAlt} mx="2px" />
+              </Link>
+            )}
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={closeSourceDetails}>
+            Close
+          </Button>
+        </ModalFooter>
+      </>
+    )}
+  </ModalContent>
+</Modal>
+
+{/* Canvas Preview Modal */}
+<Modal isOpen={isPreviewOpen} onClose={closeCanvasPreview} size="xl">
+  <ModalOverlay />
+  <ModalContent>
+    {previewCanvas && (
+      <>
+        <ModalHeader>
+          {previewCanvas.name}
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <VStack spacing={4} align="stretch">
+            {/* Canvas preview */}
+            <Box 
+              borderWidth="1px" 
+              borderRadius="md" 
+              overflow="hidden"
+              bg="gray.50"
+              p={2}
+            >
+              {previewCanvas.thumbnail ? (
+                <Image 
+                  src={previewCanvas.thumbnail} 
+                  alt={previewCanvas.name}
+                  width="100%"
+                  maxHeight="400px"
+                  objectFit="contain"
+                  borderRadius="md"
+                />
+              ) : (
+                <Box 
+                  width="100%" 
+                  height="300px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  bg="gray.100"
+                >
+                  <Icon as={FaDice} boxSize={8} color="gray.400" />
+                </Box>
+              )}
+            </Box>
+            
+            {/* Canvas metadata */}
+            <Flex justify="space-between" align="center">
+              <Text fontSize="sm" color="gray.500">
+                Created: {new Date(previewCanvas.date).toLocaleString()}
+              </Text>
+              <Text fontSize="sm">
+                {previewCanvas.tiles?.length || 0} tiles
+              </Text>
+            </Flex>
+            
+            {/* Source badges, if any */}
+            {previewCanvas.sources && previewCanvas.sources.length > 0 && (
+              <Box>
+                <Text fontSize="sm" fontWeight="bold" mb={2}>Sources:</Text>
+                <Flex flexWrap="wrap" gap={2}>
+                  {previewCanvas.sources.map(source => (
+                    <Popover
+                      key={source.id}
+                      trigger="hover"
+                      placement="auto"
+                      isLazy
+                      openDelay={300}
+                      closeDelay={200}
+                    >
+                      <PopoverTrigger>
+                        <Box
+                          key={source.id}
+                          bg={source.color || "gray.100"}
+                          px={2}
+                          py={1}
+                          borderRadius="md"
+                          fontSize="xs"
+                          cursor="pointer"
+                          _hover={{ transform: "scale(1.05)" }}
+                          transition="transform 0.2s"
+                        >
+                          {source.title}
+                        </Box>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverHeader>
+                          <Flex align="center">
+                            {source.icon && <Icon as={source.icon} mr={2} />}
+                            <Text fontWeight="bold" fontSize="sm">{source.title}</Text>
+                          </Flex>
+                        </PopoverHeader>
+                        <PopoverBody>
+                          <VStack align="start" spacing={2}>
+                            {source.author && (
+                              <Text fontSize="xs" fontStyle="italic">
+                                by {source.author} {source.year && `(${source.year})`}
+                              </Text>
+                            )}
+                            <Box maxH="150px" overflowY="auto" fontSize="sm" bg="gray.50" p={2} borderRadius="md" width="100%">
+                              {source.snippet}
+                            </Box>
+                          </VStack>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                  ))}
+                </Flex>
+              </Box>
+            )}
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          <Button 
+            colorScheme="blue" 
+            mr={3} 
+            onClick={loadFromPreview}
+          >
+            Load Canvas
+          </Button>
+          <IconButton
+            icon={<FaCloudDownloadAlt />}
+            colorScheme="teal"
+            mr={3}
+            onClick={() => {
+              // Create a temporary canvas with the preview canvas data
+              // and export it as an image
+              const tempTiles = previewCanvas.tiles || [];
+              const currentTiles = [...tiles];
+              setTiles(tempTiles);
+              
+              // Use setTimeout to ensure the DOM has updated
+              setTimeout(() => {
+                exportImage();
+                // Restore the original tiles
+                setTiles(currentTiles);
+              }, 100);
+            }}
+            title="⬇️ Save canvas to disk"
+            aria-label="Download canvas as image"
+          />
+          <Button variant="ghost" onClick={closeCanvasPreview}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </>
+    )}
+  </ModalContent>
+</Modal>
+
+{/* Update the saved canvases display with conditional margin */}
+{savedCanvases.length > 0 && (
+  <Box 
+    mt={4} 
+    width="full"
+    mb={showSavedCanvases ? 4 : (showFooter ? 20 : 4)} // Only add extra margin when footer is visible
+    position="relative"
+  >
+    <Flex 
+      justifyContent="space-between" 
+      alignItems="center" 
+      width="full" 
+      mb={2}
+      bg=""
+      p={2}
+      borderRadius="md"
+      cursor="pointer"
+      onClick={() => setShowSavedCanvases(!showSavedCanvases)}
+      _hover={{ bg: "gray.50" }}
+    >
+      <Text fontSize="md" fontWeight="semibold">
+        My Canvases ({savedCanvases.length})
+      </Text>
+      
+      <HStack spacing={2}>
+        <IconButton
+          icon={showSavedCanvases ? <FaChevronUp /> : <FaChevronDown />}
+          size="xs"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSavedCanvases(!showSavedCanvases);
+          }}
+          aria-label={showSavedCanvases ? "Collapse saved canvases" : "Expand saved canvases"}
+        />
+      </HStack>
+    </Flex>
+    
+    {showSavedCanvases && (
+      <Flex 
+        flexWrap="wrap" 
+        gap={3} 
+        justify={{ base: "center", md: "flex-start" }}
+        mb={4}
+        bg="white"
+        borderRadius="md"
+        p={2}
+      >
+        {savedCanvases.map(canvas => (
+          <Box
+            key={canvas.id}
+            bg="white"
+            borderRadius="md"
+            boxShadow="sm"
+            width={{ base: "120px", md: "150px" }}
+            height={{ base: "140px", md: "170px" }}
+            position="relative"
+            overflow="hidden"
+            onClick={(e) => openCanvasPreview(canvas, e)}
+            cursor="pointer"
+            transition="transform 0.2s"
+            _hover={{ transform: "scale(1.03)" }}
+          >
+            {/* Title now at the top */}
+            <Box 
+              width="100%"
+              p={1}
+              bg="white"
+              borderBottom="1px"
+              borderColor="gray.100"
+            >
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                noOfLines={1}
+                textAlign="center"
+                color="gray.700"
+              >
+                {canvas.name}
+              </Text>
+            </Box>
+            
+            <CloseButton
+              size="sm"
+              position="absolute"
+              right="2px"
+              top="2px"
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteCanvas(canvas.id, e);
+              }}
+              title="❌ Delete canvas"
+              zIndex={1}
+            />
+            
+            {canvas.thumbnail ? (
+              <Image 
+                src={canvas.thumbnail} 
+                alt={canvas.name}
+                width="100%"
+                height="80%"
+                objectFit="cover"
+              />
+            ) : (
+              <Box 
+                width="100%" 
+                height="80%"
+                bg="gray.100"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Icon as={FaDice} boxSize={6} color="gray.400" />
+              </Box>
+            )}
+          </Box>
+        ))}
+      </Flex>
+    )}
+  </Box>
+)}
 
 </Flex>
 </ChakraProvider>
