@@ -1,8 +1,6 @@
 # Cut-Up Machine
 
-A modern web application for creating literary cut-ups, inspired by the technique popularized by William S. Burroughs and Brion Gysin.
-
-![Cut-Up Machine Screenshot](screenshot.png)
+A web application for creating literary cut-ups, inspired by the technique popularized by William S. Burroughs and Brion Gysin.
 
 ## Overview
 
@@ -29,7 +27,6 @@ The Cut-Up Machine allows users to create textual collages by cutting up and rec
 
 - **Customize Tiles**: Add more tiles or remove some with the + and - buttons
 - **Shuffle**: Randomly rearrange all tiles on the canvas
-- **Undo/Redo**: Track your changes with full history support
 - **Source Preview**: Hover over source badges to see text snippets
 
 ## Technical Details
