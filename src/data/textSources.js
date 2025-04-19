@@ -24,11 +24,11 @@ export const textSources = {
       },
       yeats: {
         title: "W.B. Yeats",
-        text: `We sat together at one summer’s end,
+        text: `We sat together at one summer's end,
 That beautiful mild woman, your close friend,   
 And you and I, and talked of poetry.
-I said, ‘A line will take us hours maybe;
-Yet if it does not seem a moment’s thought,   
+I said, 'A line will take us hours maybe;
+Yet if it does not seem a moment's thought,   
 Our stitching and unstitching has been naught.   
 Better go down upon your marrow-bones   
 And scrub a kitchen pavement, or break stones   
@@ -37,33 +37,33 @@ For to articulate sweet sounds together
 Is to work harder than all these, and yet   
 Be thought an idler by the noisy set
 Of bankers, schoolmasters, and clergymen   
-The martyrs call the world.’
+The martyrs call the world.'
                                           And thereupon
 That beautiful mild woman for whose sake   
-There’s many a one shall find out all heartache   
+There's many a one shall find out all heartache   
 On finding that her voice is sweet and low   
-Replied, ‘To be born woman is to know—
+Replied, 'To be born woman is to know—
 Although they do not talk of it at school—
-That we must labour to be beautiful.’
-I said, ‘It’s certain there is no fine thing   
-Since Adam’s fall but needs much labouring.
+That we must labour to be beautiful.'
+I said, 'It's certain there is no fine thing   
+Since Adam's fall but needs much labouring.
 There have been lovers who thought love should be   
 So much compounded of high courtesy   
 That they would sigh and quote with learned looks   
 Precedents out of beautiful old books;   
-Yet now it seems an idle trade enough.’
+Yet now it seems an idle trade enough.'
 
 We sat grown quiet at the name of love;   
 We saw the last embers of daylight die,   
 And in the trembling blue-green of the sky   
 A moon, worn as if it had been a shell   
-Washed by time’s waters as they rose and fell   
+Washed by time's waters as they rose and fell   
 About the stars and broke in days and years.
 
-I had a thought for no one’s but your ears:   
+I had a thought for no one's but your ears:   
 That you were beautiful, and that I strove   
 To love you in the old high way of love;
-That it had all seemed happy, and yet we’d grown   
+That it had all seemed happy, and yet we'd grown   
 As weary-hearted as that hollow moon.
 
 Turning and turning in the widening gyre   
@@ -142,7 +142,7 @@ A pretty laugh of crystal.
 
 Her little feet under her slip
 
-Sped away: ‘Will you desist!’
+Sped away: 'Will you desist!'
 
 Allowing that first bold act,
 
@@ -154,9 +154,9 @@ Poor things, I gently kissed her lids.
 
 – She threw her vapid head back.
 
-‘Oh! That’s worse, that is!’...
+'Oh! That's worse, that is!'...
 
-‘Sir, I’ve two words to say to you...’
+'Sir, I've two words to say to you...'
 
 – I planted the rest on her breast
 
@@ -193,7 +193,7 @@ They call the eternal churners of victims,
 Ten nights, without regret for the lighted bays!
 
 Sweeter than sour apples to the children
-The green ooze spurting through my hull’s pine,
+The green ooze spurting through my hull's pine,
 Washed me of vomit and the blue of wine,
 Carried away my rudder and my anchor.
 
@@ -210,29 +210,29 @@ Ferment the bitter reds of our desire!
 I knew the skies split apart by lightning,
 Waterspouts, breakers, tides: I knew the night,
 The Dawn exalted like a crowd of doves,
-I saw what men think they’ve seen in the light!
+I saw what men think they've seen in the light!
 
 I saw the low sun, stained with mystic terrors,
 Illuminate long violet coagulations,
-Like actors in a play, a play that’s ancient,
+Like actors in a play, a play that's ancient,
 Waves rolling back their trembling of shutters!
 
 I dreamt the green night of blinded snows,
 A kiss lifted slow to the eyes of seas,
 The circulation of unheard-of flows,
-Sung phosphorus’s blue-yellow awakenings!
+Sung phosphorus's blue-yellow awakenings!
 
-For months on end, I’ve followed the swell
+For months on end, I've followed the swell
 That batters at the reefs like terrified cattle,
-Not dreaming the Three Marys’ shining feet
-Could muzzle with their force the Ocean’s hell!
+Not dreaming the Three Marys' shining feet
+Could muzzle with their force the Ocean's hell!
 
-I’ve struck Floridas, you know, beyond belief,
+I've struck Floridas, you know, beyond belief,
 Where eyes of panthers in human skins,
 Merge with the flowers! Rainbow bridles, beneath
-the seas’ horizon, stretched out to shadowy fins!
+the seas' horizon, stretched out to shadowy fins!
 
-I’ve seen the great swamps boil, and the hiss
+I've seen the great swamps boil, and the hiss
 Where a whole whale rots among the reeds!
 Downfalls of water among tranquilities,
 Distances showering into the abyss.
@@ -277,17 +277,17 @@ Of rutting Behemoths and dark Maelstroms,
 Eternal spinner of blue immobilities,
 I regret the ancient parapets of Europe!
 
-I’ve seen archipelagos of stars! And isles
+I've seen archipelagos of stars! And isles
 Whose maddened skies open for the sailor:
 – Is it in depths of night you sleep, exiled,
 Million birds of gold, O future Vigour? –
 
-But, truly, I’ve wept too much! The Dawns
+But, truly, I've wept too much! The Dawns
 Are heart-breaking, each moon hell, each sun bitter:
 Fierce love has swallowed me in drunken torpors.
 O let my keel break! Tides draw me down!
 
-If I want one pool in Europe, it’s the cold
+If I want one pool in Europe, it's the cold
 Black pond where into the scented night
 A child squatting filled with sadness launches
 A boat as frail as a May butterfly.
@@ -469,40 +469,40 @@ And give me all my heart desires.`,
       shakespeare: {
         title: "Shakespeare",
         text: `To be, or not to be: that is the question:
-        Whether ’tis nobler in the mind to suffer
+        Whether 'tis nobler in the mind to suffer
         The slings and arrows of outrageous fortune,
         Or to take arms against a sea of troubles,
         And by opposing end them? To die: to sleep;
         No more; and by a sleep to say we end
         The heart-ache and the thousand natural shocks
-        That flesh is heir to, ’tis a consummation
-        Devoutly to be wish’d. To die, to sleep;
-        To sleep: perchance to dream: ay, there’s the rub;
+        That flesh is heir to, 'tis a consummation
+        Devoutly to be wish'd. To die, to sleep;
+        To sleep: perchance to dream: ay, there's the rub;
         For in that sleep of death what dreams may come
         When we have shuffled off this mortal coil,
-        Must give us pause: there’s the respect
+        Must give us pause: there's the respect
         That makes calamity of so long life;
         For who would bear the whips and scorns of time,
-        The oppressor’s wrong, the proud man’s contumely,
-        The pangs of despised love, the law’s delay,
+        The oppressor's wrong, the proud man's contumely,
+        The pangs of despised love, the law's delay,
         The insolence of office and the spurns
         That patient merit of the unworthy takes,
         When he himself might his quietus make
         With a bare bodkin? who would fardels bear,
         To grunt and sweat under a weary life,
         But that the dread of something after death,
-        The undiscover’d country from whose bourn
+        The undiscover'd country from whose bourn
         No traveller returns, puzzles the will
         And makes us rather bear those ills we have
         Than fly to others that we know not of?
         Thus conscience does make cowards of us all;
         And thus the native hue of resolution
-        Is sicklied o’er with the pale cast of thought,
+        Is sicklied o'er with the pale cast of thought,
         And enterprises of great pith and moment
         With this regard their currents turn awry,
         And lose the name of action.–Soft you now!
         The fair Ophelia! Nymph, in thy orisons
-        Be all my sins remember’d.`,
+        Be all my sins remember'd.`,
         icon: FaQuoteLeft,
       },
       woolf: {
@@ -522,7 +522,7 @@ And give me all my heart desires.`,
         before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, 
         that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people's hats off— 
         then, I account it high time to get to sea as soon as I can. Melville's narrator, Ishmael, seeks refuge in the vastness of the ocean, 
-        both a literal and metaphorical space that holds the promise of freedom and self-discovery. The sea, in Melville’s world, becomes a stage for existential reflection, 
+        both a literal and metaphorical space that holds the promise of freedom and self-discovery. The sea, in Melville's world, becomes a stage for existential reflection, 
         a symbol of the challenges and absurdities of life itself.`,
         icon: FaQuoteLeft,
       },
@@ -590,7 +590,7 @@ And give me all my heart desires.`,
         text: `I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach, 
         and not, when I came to die, discover that I had not lived. I did not wish to live what was not life, living is so dear; nor did I wish to practice resignation, 
         unless it was quite necessary. I wanted to live deep and suck out all the marrow of life, to live so sturdily and Spartan-like as to put to rout all that was not life. 
-        *Walden* is Thoreau’s manifesto of radical simplicity and self-reliance, born from two years in a cabin near Walden Pond. With sharp observation and quiet defiance, 
+        *Walden* is Thoreau's manifesto of radical simplicity and self-reliance, born from two years in a cabin near Walden Pond. With sharp observation and quiet defiance, 
         he challenges materialism, routine, and blind conformity. His reflections roam from the texture of morning light to the moral imperative of civil disobedience. 
         Thoreau urges readers to strip life to its barest essentials, finding freedom not in abundance but in awareness. His prose, meditative and bold, continues to speak 
         to anyone searching for a more deliberate, meaningful existence.`,
@@ -599,7 +599,7 @@ And give me all my heart desires.`,
       baldwin: {
         title: "James Baldwin",
         text: `You think your pain and your heartbreak are unprecedented in the history of the world, but then you read. It was books that taught me that the things 
-  that tormented me most were the very things that connected me with all the people who were alive, or who had ever been alive. Baldwin’s work in *The Fire Next Time* 
+  that tormented me most were the very things that connected me with all the people who were alive, or who had ever been alive. Baldwin's work in *The Fire Next Time* 
   is part memoir, part moral witness, and wholly uncompromising. With lyrical force and righteous clarity, he exposes the violence beneath American racial injustice 
   and the psychic toll it takes on both oppressed and oppressor. He writes of Harlem, of churches, of family, and of fear—fear of white people, yes, 
   but also the deeper fear that love might be impossible in such a country. Yet Baldwin does not despair. He calls instead for confrontation—honest, unflinching, 
@@ -610,7 +610,7 @@ And give me all my heart desires.`,
         title: "Hannah Arendt",
         text: `The sad truth is that most evil is done by people who never make up their minds to be good or evil. In *The Origins of Totalitarianism*, 
   Arendt dissects the conditions that gave rise to fascist regimes in the 20th century. With rigorous intellect and moral clarity, she traces the machinery 
-  of ideological control, the destruction of individuality, and the cultivation of terror. Arendt’s most famous concept, the “banality of evil,” does not excuse 
+  of ideological control, the destruction of individuality, and the cultivation of terror. Arendt's most famous concept, the "banality of evil," does not excuse 
   but rather reveals: that monstrous acts are often carried out by ordinary people following orders. Her work is not only historical analysis—it is a warning, 
   a demand to remain awake, to preserve the space of thought and moral judgment. She believed that political responsibility begins with attention, with speech, 
   and with the courage to act when others remain silent. Her writing is dense but electric, filled with a deep belief in the necessity of human freedom.`,
@@ -626,6 +626,18 @@ And give me all my heart desires.`,
   grounded in a belief that words can change the world. His autobiography is not merely testimony but argument—against slavery, yes, but also against the degradation 
   of human dignity anywhere. Through measured prose and mounting conviction, Douglass transforms personal pain into political power. His voice remains a cornerstone 
   of American moral literature.`,
+        icon: FaBook,
+      },
+      darwin: {
+        title: "Charles Darwin",
+        text: `When on board H.M.S. Beagle, as naturalist, I was much struck with certain facts in the distribution of the inhabitants of South America, and in the geological relations of the present to the past inhabitants of that continent. These facts seemed to me to throw some light on the origin of species—that mystery of mysteries, as it has been called by one of our greatest philosophers. On my return home, it occurred to me, in 1837, that something might perhaps be made out on this question by patiently accumulating and reflecting on all sorts of facts which could possibly have any bearing on it. After five years' work I allowed myself to speculate on the subject, and drew up some short notes; these I enlarged in 1844 into a sketch of the conclusions, which then seemed to me probable: from that period to the present day I have steadily pursued the same object. I hope that I may be excused for entering on these personal details, as I give them to show that I have not been hasty in coming to a decision.
+
+        My work is now nearly finished; but as it will take me two or three more years to complete it, and as my health is far from strong, I have been urged to publish this Abstract. I have more especially been induced to do this, as Mr. Wallace, who is now studying the natural history of the Malay archipelago, has arrived at almost exactly the same general conclusions that I have on the origin of species. Last year he sent to me a memoir on this subject, with a request that I would forward it to Sir Charles Lyell, who sent it to the Linnean Society, and it is published in the third volume of the Journal of that Society. Sir C. Lyell and Dr. Hooker, who both knew of my work—the latter having read my sketch of 1844—honoured me by thinking it advisable to publish, with Mr. Wallace's excellent memoir, some brief extracts from my manuscripts.`,
+        icon: FaBook,
+      },
+      einstein: {
+        title: "Albert Einstein",
+        text: `The most beautiful experience we can have is the mysterious. It is the fundamental emotion that stands at the cradle of true art and true science. Whoever does not know it and can no longer wonder, no longer marvel, is as good as dead, and his eyes are dimmed. It was the experience of mystery—even if mixed with fear—that engendered religion. A knowledge of the existence of something we cannot penetrate, our perceptions of the most profound reason and the most radiant beauty, which only in their most primitive forms are accessible to our minds—it is this knowledge and this emotion that constitute true religiosity; in this sense, and in this alone, I am a deeply religious man. I cannot conceive of a God who rewards and punishes his creatures, or has a will of the kind that we experience in ourselves. Neither can I nor would I want to conceive of an individual that survives his physical death; let feeble souls, from fear or absurd egoism, cherish such thoughts. I am satisfied with the mystery of the eternity of life and with the awareness and a glimpse of the marvelous structure of the existing world, together with the devoted striving to comprehend a portion, be it ever so tiny, of the Reason that manifests itself in nature.`,
         icon: FaBook,
       },
     },
@@ -649,6 +661,89 @@ And God said, Let there be a firmament in the midst of the waters, and let it di
 From dust to living breath, creation poured forth word by word. Land separated from sea. Stars placed with purpose. Creatures crawling, flying, swimming—the world teeming with order. And man, formed of clay, given dominion, yet called to tend and walk in humility.
 
 Even now, the echoes of Genesis speak not just of beginnings, but of the mystery at the heart of life itself.`,
+        icon: FaScroll,
+      },
+      kjv: {
+        title: "King James Bible",
+        text: `The Lord is my shepherd; I shall not want.
+He maketh me to lie down in green pastures: he leadeth me beside the still waters.
+He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake.
+Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.
+Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.
+Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever.
+
+Though I speak with the tongues of men and of angels, and have not charity, I am become as sounding brass, or a tinkling cymbal.
+And though I have the gift of prophecy, and understand all mysteries, and all knowledge; and though I have all faith, so that I could remove mountains, and have not charity, I am nothing.
+And though I bestow all my goods to feed the poor, and though I give my body to be burned, and have not charity, it profiteth me nothing.
+Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up,
+Doth not behave itself unseemly, seeketh not her own, is not easily provoked, thinketh no evil;
+Rejoiceth not in iniquity, but rejoiceth in the truth;
+Beareth all things, believeth all things, hopeth all things, endureth all things.
+Charity never faileth: but whether there be prophecies, they shall fail; whether there be tongues, they shall cease; whether there be knowledge, it shall vanish away.`,
+        icon: FaScroll,
+      },
+      egyptian: {
+        title: "Egyptian Book of the Dead",
+        text: `I have not committed sin.
+I have not committed robbery with violence.
+I have not stolen.
+I have not slain men and women.
+I have not stolen grain.
+I have not purloined offerings.
+I have not stolen the property of the gods.
+I have not uttered lies.
+I have not carried away food.
+I have not uttered curses.
+I have not committed adultery.
+I have not made anyone weep.
+I have not eaten the heart.
+I have not attacked any man.
+I am not a man of deceit.
+I have not stolen cultivated land.
+I have not been an eavesdropper.
+I have not slandered.
+I have not been angry without just cause.
+I have not debauched the wife of any man.
+I have not debauched the wife of any man.
+I have not polluted myself.
+I have not terrorized anyone.
+I have not transgressed the law.
+I have not been hot-tempered.
+I have not been deaf to words of truth.
+I have not made trouble.
+I have not acted insolently.
+I have not stirred up strife.
+I have not judged hastily.
+I have not been an eavesdropper.
+I have not multiplied words in speaking.
+I have not wronged anyone.
+I have not done evil to mankind.
+I have not worked witchcraft against the king.
+I have never stopped the flow of water.
+I have never raised my voice.
+I have not cursed God.
+I have not acted with evil rage.
+I have not stolen the bread of the gods.
+I have not carried away the khenfu cakes from the spirits of the dead.
+I have not snatched away the bread of the child.
+I have not committed sin against the local god of my town.`,
+        icon: FaScroll,
+      },
+      greek: {
+        title: "Greek Mythology",
+        text: `In the beginning, there was Chaos, a yawning nothingness. Out of the void emerged Gaia, the Earth, and other divine beings such as Eros (Love), the Abyss (Tartarus), and Erebus (Darkness).
+
+Gaia alone gave birth to Uranus, the starry sky, who became her husband. Together they produced the Titans, the Cyclopes, and the Hecatoncheires. But Uranus was a cruel father, imprisoning his children in the depths of the Earth.
+
+Gaia, grieving for her children, created a great sickle and urged her children to take revenge. Only Cronus, the youngest Titan, was willing. He ambushed his father and castrated him, throwing his genitals into the sea. From the blood that fell upon the Earth, the Furies, the Giants, and the Meliae were born.
+
+Cronus became the ruler of the universe, but he feared a prophecy that one of his children would overthrow him. So he swallowed each of his children as they were born. His wife Rhea, grieving for her children, hid Zeus when he was born and gave Cronus a stone wrapped in swaddling clothes instead.
+
+When Zeus grew up, he forced Cronus to disgorge his siblings, and together they waged war against the Titans. After ten years of battle, the Olympians emerged victorious, and Zeus became the ruler of the gods.
+
+The gods lived on Mount Olympus, where they feasted on ambrosia and nectar, and ruled over the affairs of mortals. Each god had their own domain: Zeus ruled the sky, Poseidon the sea, Hades the underworld, Hera marriage, Athena wisdom, Apollo the sun, Artemis the moon, Ares war, Aphrodite love, Hephaestus fire, Hermes messages, and Dionysus wine.
+
+The gods were not always just or kind. They often interfered in human affairs, sometimes helping, sometimes harming. They fell in love with mortals, fought among themselves, and played tricks on each other. Their stories explain the mysteries of the world and teach lessons about human nature.`,
         icon: FaScroll,
       },
       tao: {
@@ -755,6 +850,50 @@ The father and uncle of the Hero Twins are murdered at a ball game in Xibalba. H
 Her sons then challenge the Lords who killed their father and uncle, succeeding and becoming the sun and the moon.
 
 Humans are successfully created from maize. The gods give them morality in order to keep them loyal. Later, they give the humans wives to make them content.`,
+        icon: FaScroll,
+      },
+      upanishads: {
+        title: "Upanishads",
+        text: `That is full; this is full. The full comes from the full. Taking the full from the full, the full itself remains.
+
+        Om is the bow, the arrow is the soul, Brahman the mark, By the undistracted man is It to be penetrated, One should come to It with the arrow of the soul.
+
+        As the web issues out of the spider and is withdrawn, As plants sprout from the earth, As hair grows from the body, Even so, the sages say, this universe springs from the Deathless Self.
+
+        The Self is hidden in all beings and does not shine forth, But it is seen by subtle seers through their sharp and subtle intellect.
+
+        A wise man should keep down speech and mind; He should keep them within the Self which is knowledge; He should keep knowledge within the Self which is the Great; And he should keep that within the Self which is the Quiet.
+
+        Where the mind is led by the wandering senses, Then wisdom is lost, as a boat on the waters is lost in a storm.
+
+        When a man's mind is bound by the fetters of his senses, Then he is lost, as a boat on the waters is lost in a storm.
+
+        Therefore, O mighty armed, his knowledge is steady whose senses are restrained from objects of sense.
+
+        The wise call him illumined for whom all desires enter the heart as rivers enter the ocean which, filled from all sides, remains unmoved; but not the man who is full of desires.
+
+        He attains peace into whom all desires flow as rivers flow into the ocean, which is filled with water but remains unmoved; not he who is full of desires.`,
+        icon: FaScroll,
+      },
+      confucius: {
+        title: "Confucius",
+        text: `The Master said, "Is it not pleasant to learn with a constant perseverance and application? Is it not delightful to have friends coming from distant quarters? Is he not a man of complete virtue, who feels no discomposure though men may take no note of him?"
+
+        The philosopher Yu said, "They are few who, being filial and fraternal, are fond of offending against their superiors. There have been none, who, not liking to offend against their superiors, have been fond of stirring up confusion.
+
+        The Master said, "To rule a country of a thousand chariots, there must be reverent attention to business, and sincerity; economy in expenditure, and love for men; and the employment of the people at the proper seasons."
+
+        The Master said, "A youth, when at home, should be filial, and, abroad, respectful to his elders. He should be earnest and truthful. He should overflow in love to all, and cultivate the friendship of the good. When he has time and opportunity, after the performance of these things, he should employ them in polite studies."
+
+        Tsze-hsia said, "If a man withdraws his mind from the love of beauty, and applies it as sincerely to the love of the virtuous; if, in serving his parents, he can exert his utmost strength; if, in serving his prince, he can devote his life; if, in his intercourse with his friends, his words are sincere—although men say that he has not learned, I will certainly say that he has."
+
+        The Master said, "If the scholar be not grave, he will not call forth any veneration, and his learning will not be solid.
+
+        Hold faithfulness and sincerity as first principles. Have no friends not equal to yourself. When you have faults, do not fear to abandon them."
+
+        The Master said, "The cautious seldom err."
+
+        The Master said, "The superior man wishes to be slow in his speech and earnest in his conduct."`,
         icon: FaScroll,
       },
     },

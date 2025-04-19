@@ -10,7 +10,7 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { 
   FaCut, FaRandom, FaDownload, FaTrash, FaPlus, FaMinus, FaCopy, FaDice, FaExpand, FaCompress, FaTimes, FaCloudDownloadAlt, FaChevronDown,
-  FaChevronUp, FaChevronDown as FaChevronExpand, FaUndo, FaRedo, FaSave, FaFolderOpen, FaSyncAlt, FaPlay, FaPause
+  FaChevronUp, FaChevronDown as FaChevronExpand, FaSave, FaFolderOpen, FaSyncAlt, FaPlay, FaPause
 } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 import html2canvas from 'html2canvas';
@@ -34,9 +34,6 @@ function App() {
   const [showSourceSection, setShowSourceSection] = useState(true);
   const appContainerRef = useRef(null);
   const footerRef = useRef(null);
-  const [history, setHistory] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
-  const isUndoRedoAction = useRef(false);
   const [savedCanvases, setSavedCanvases] = useState([]);
   const [canvasName, setCanvasName] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -463,7 +460,6 @@ const cutUpText = (text) => {
   });
 
   setTiles(positionedTiles);
-  saveToHistory(positionedTiles);
   };
 
 // Add more tiles to the existing board
@@ -531,7 +527,6 @@ const addTiles = () => {
     status: 'success', 
     duration: 650
   });
-  saveToHistory(newTiles);
 };
 
 // Remove a random selection of tiles from the board
@@ -567,7 +562,6 @@ const removeRandomTiles = () => {
     status: 'info', 
     duration: 700
   });
-  saveToHistory(remainingTiles);
 };
   // Repositions existing tiles to random locations on the board
   const shuffleTiles = () => {
@@ -616,11 +610,35 @@ const removeRandomTiles = () => {
     
     // Update state with new tile objects
     setTiles(repositionedTiles);
-    saveToHistory(repositionedTiles);
   };
 
   // Export as image with temporary header and no toolbar
   const exportImage = () => {
+    // Hide all toolbar elements
+    const toolbarElements = document.querySelectorAll('.source-toolbar, .canvas-toolbar, .toolbar-element, [class*="toolbar"]');
+    const originalDisplay = [];
+    toolbarElements.forEach(el => {
+      originalDisplay.push(el.style.display);
+      el.style.display = 'none';
+    });
+    
+    // Hide the footer and any other UI elements that might appear in the export
+    const footer = document.querySelector('footer');
+    const footerOriginalDisplay = footer ? footer.style.display : null;
+    if (footer) footer.style.display = 'none';
+
+    // Also hide any parent containers that might contain toolbar elements
+    const appContainer = document.querySelector('[class*="App"]');
+    if (appContainer) {
+      const appChildren = appContainer.children;
+      for (let i = 0; i < appChildren.length; i++) {
+        if (!appChildren[i].classList.contains('tile-box')) {
+          originalDisplay.push(appChildren[i].style.display);
+          appChildren[i].style.display = 'none';
+        }
+      }
+    }
+
     // Create temporary header element
     const header = document.createElement('div');
     header.id = 'temp-export-header';
@@ -633,28 +651,66 @@ const removeRandomTiles = () => {
     header.style.zIndex = '1000';
     header.innerHTML = '✂️ cut up';
     
-    // Hide all toolbar buttons temporarily
-    const toolbarButtons = document.querySelectorAll('.source-toolbar, .canvas-toolbar');
-    toolbarButtons.forEach(el => {
-      el.style.display = 'none';
+    // Create a temporary container for the tiles
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'relative';
+    tempContainer.style.width = boardRef.current.offsetWidth + 'px';
+    tempContainer.style.height = boardRef.current.offsetHeight + 'px';
+    tempContainer.style.backgroundColor = '#f7fafc';
+    
+    // Clone all tile elements into the temporary container
+    const tileElements = boardRef.current.querySelectorAll('.tile-box');
+    tileElements.forEach(tile => {
+      const clone = tile.cloneNode(true);
+      const rect = tile.getBoundingClientRect();
+      const boardRect = boardRef.current.getBoundingClientRect();
+      
+      // Position the clone relative to the temporary container
+      clone.style.position = 'absolute';
+      clone.style.left = (rect.left - boardRect.left) + 'px';
+      clone.style.top = (rect.top - boardRect.top) + 'px';
+      clone.style.transform = 'none'; // Remove any transforms
+      
+      tempContainer.appendChild(clone);
     });
     
-    // Add the temporary header to the board
-    boardRef.current.appendChild(header);
+    // Add the header to the temporary container
+    tempContainer.appendChild(header);
     
-    // Capture the canvas
-    html2canvas(boardRef.current, { backgroundColor: '#f7fafc' }).then(canvas => {
+    // Add the temporary container to the body
+    document.body.appendChild(tempContainer);
+    
+    // Capture the temporary container
+    html2canvas(tempContainer, { 
+      backgroundColor: '#f7fafc',
+      scale: 2, // Higher quality
+      logging: false,
+      useCORS: true
+    }).then(canvas => {
       // Create and click download link
       const link = document.createElement('a');
       link.download = 'cut-up-poetry.jpg';
-      link.href = canvas.toDataURL('image/jpeg', 0.7); // Use JPEG at 70% quality
+      link.href = canvas.toDataURL('image/jpeg', 0.9); // Higher quality
       link.click();
       
+      // Clean up
+      document.body.removeChild(tempContainer);
+      
       // Restore original UI
-      boardRef.current.removeChild(header);
-      toolbarButtons.forEach(el => {
-        el.style.display = '';
+      toolbarElements.forEach((el, index) => {
+        el.style.display = originalDisplay[index];
       });
+      if (footer) footer.style.display = footerOriginalDisplay;
+      
+      // Restore app container children
+      if (appContainer) {
+        const appChildren = appContainer.children;
+        for (let i = 0; i < appChildren.length; i++) {
+          if (!appChildren[i].classList.contains('tile-box')) {
+            appChildren[i].style.display = originalDisplay[originalDisplay.length - appChildren.length + i];
+          }
+        }
+      }
       
       toast({ title: 'Canvas saved to disk!', status: 'success'});
     });
@@ -748,40 +804,6 @@ const randomizeSources = () => {
     updateBoardSize();
   }, [selectedSources, showSourceSection]);
 
-  // Add this function to save state to history
-  const saveToHistory = (newTiles) => {
-    if (isUndoRedoAction.current) {
-      isUndoRedoAction.current = false;
-      return;
-    }
-    
-    // If we're not at the end of history, truncate it
-    if (historyIndex !== history.length - 1) {
-      setHistory(history.slice(0, historyIndex + 1));
-    }
-    
-    // Add the new state to history
-    setHistory(prev => [...prev, [...newTiles]]);
-    setHistoryIndex(prev => prev + 1);
-  };
-
-  // Add these undo/redo functions
-  const undo = () => {
-    if (historyIndex > 0) {
-      isUndoRedoAction.current = true;
-      setHistoryIndex(prev => prev - 1);
-      setTiles(history[historyIndex - 1]);
-    }
-  };
-
-  const redo = () => {
-    if (historyIndex < history.length - 1) {
-      isUndoRedoAction.current = true;
-      setHistoryIndex(prev => prev + 1);
-      setTiles(history[historyIndex + 1]);
-    }
-  };
-
   // Load saved canvases from localStorage on init
   useEffect(() => {
     const saved = localStorage.getItem('savedCanvases');
@@ -857,9 +879,6 @@ const randomizeSources = () => {
   const loadCanvas = (canvas) => {
     setTiles(canvas.tiles);
     setSelectedSources(canvas.sources);
-    
-    // Update history
-    saveToHistory(canvas.tiles);
     
     onClose();
     
@@ -997,9 +1016,13 @@ const randomizeSources = () => {
                 placeholder="Paste text here..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    addCustomText();
+                  }
+                }}
                 flex="1"
               />
-
             </HStack>
             
             {/* Category Buttons and Cut Up Button */}
@@ -1275,10 +1298,21 @@ const randomizeSources = () => {
                 <IconButton
                   size="xs"
                   variant="outline"
+                  colorScheme="teal"
+                  onClick={generateTiles}
+                  icon={<FaCut />}
+                  className="toolbar-element"
+                  title="✂️ Clear all tiles and cut sources up again"
+                />
+                </HStack>
+                <HStack spacing={1}>
+                <IconButton
+                  size="xs"
+                  variant="outline"
                   colorScheme="blue"
                   onClick={exportImage}
                   icon={<FaCloudDownloadAlt />}
-                  title="⬇️ Save canvas to disk"
+                  title="⬇️ Export canvas to disk"
                 />
                 <IconButton
                   size="xs"
@@ -1330,19 +1364,7 @@ const randomizeSources = () => {
                   size="xs"
                   variant="outline"
                   colorScheme="blue"
-                  onClick={undo}
-                  isDisabled={historyIndex <= 0}
-                  icon={<FaUndo />}
-                  title="↩️ Undo"
-                />
-                <IconButton
-                  size="xs"
-                  variant="outline"
-                  colorScheme="blue"
-                  onClick={redo}
-                  isDisabled={historyIndex >= history.length - 1}
-                  icon={<FaRedo />}
-                  title="↪️ Redo"
+                  onClick={randomizeSources}
                 />
                 <IconButton
                   size="xs"
@@ -1417,14 +1439,27 @@ const randomizeSources = () => {
               >
                 {/* Group 1: Main actions */}
                 <HStack spacing={1}>
-                  <IconButton
-                    size="xs"
-                    variant="outline"
-                    colorScheme="red"
-                    onClick={clearTiles}
-                    icon={<FaTrash />}
-                    title="☠️ Clear all tiles"
-                  />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={clearTiles}
+                  icon={<FaTrash />}
+                  className="toolbar-element"
+                  title="☠️ Clear all tiles"
+                />
+                <IconButton
+                  size="xs"
+                  variant="outline"
+                  colorScheme="teal"
+                  onClick={generateTiles}
+                  icon={<FaCut />}
+                  className="toolbar-element"
+                  title="✂️ Clear all tiles and cut sources up again"
+                />
+                </HStack>
+                <HStack spacing={1}>
+
                   <IconButton
                     size="xs"
                     variant="outline"
@@ -1479,23 +1514,13 @@ const randomizeSources = () => {
                 
                 {/* Group 3: History and shuffle */}
                 <HStack spacing={1}>
-                  <IconButton
+                <IconButton
                     size="xs"
                     variant="outline"
                     colorScheme="blue"
-                    onClick={undo}
-                    isDisabled={historyIndex <= 0}
-                    icon={<FaUndo />}
-                    title="↩️ Undo"
-                  />
-                  <IconButton
-                    size="xs"
-                    variant="outline"
-                    colorScheme="blue"
-                    onClick={redo}
-                    isDisabled={historyIndex >= history.length - 1}
-                    icon={<FaRedo />}
-                    title="↪️ Redo"
+                    onClick={randomizeSources}
+                    icon={<FaDiceFive />}
+                    title="🔄 Randomize sources"
                   />
                   <IconButton
                     size="xs"
@@ -1996,7 +2021,7 @@ const randomizeSources = () => {
                 setTiles(currentTiles);
               }, 100);
             }}
-            title="⬇️ Save canvas to disk"
+            title="⬇️ Export canvas to disk"
             aria-label="Download canvas as image"
           />
           <Button variant="ghost" onClick={closeCanvasPreview}>
