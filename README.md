@@ -2,8 +2,6 @@
 
 A modern web application for creating literary cut-ups, inspired by the technique popularized by William S. Burroughs and Brion Gysin.
 
-![Cut-Up Machine Screenshot](screenshot.png)
-
 ## Overview
 
 The Cut-Up Machine allows users to create textual collages by cutting up and recombining text from various sources. This technique, known as the "cut-up method," has been used by artists and writers to generate new creative works and discover unexpected connections between texts.
